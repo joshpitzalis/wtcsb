@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { database } from '../firebase'
+import { database, auth } from '../firebase'
 import { Redirect } from 'react-router-dom'
 import {
   Page,
@@ -11,20 +11,15 @@ import {
 
 export default class Applicants extends Component {
   state = {
-    job: null,
-    applicants: [
-      {
-        name: 'hey',
-        email: 'yo@hey.com',
-        cv: 'https://workflowy.com/'
-      }
-    ],
+    applicants: null,
     to: null
   }
   componentDidMount() {
     database
-      .ref(`/jobs/${this.props.match.params.jobId}`)
-      .on('value', snap => this.setState({ job: Object.values(snap.val()) }))
+      .ref(`jobs/${this.props.match.params.jobId}/applicants`)
+      .on('value', snap =>
+        this.setState({ applicants: Object.values(snap.val()) })
+      )
   }
   render() {
     if (this.state.to) {
@@ -33,15 +28,17 @@ export default class Applicants extends Component {
     return (
       <Page
         fullWidth
-        title={this.state.job[0]}
-        primaryAction={{ content: 'Logout' }}
+        title={this.state.job && this.state.job[0]}
+        primaryAction={{ content: 'Logout', onAction: () => auth.signOut() }}
         secondaryActions={[
-          { content: 'Edit', onAction: () => this.setState({ to: '/create' }) }
-        ]}
-        breadcrumbs={[
           {
-            content: 'Dashboard',
-            url: '/dashboard'
+            content: 'Back to Dashboard',
+            onAction: () => this.setState({ to: '/dashboard' })
+          },
+          {
+            content: 'Edit this Job',
+            onAction: () =>
+            this.setState({ to: `/edit/${this.props.match.params.jobId}` })
           }
         ]}
       >

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { database } from '../firebase'
+import { database, auth } from '../firebase'
 import { Redirect, Link } from 'react-router-dom'
 import {
   Page,
@@ -27,7 +27,7 @@ export default class Dashboard extends Component {
       <Page
         fullWidth
         title="WTCSB Employment Portal"
-        primaryAction={{ content: 'Logout' }}
+        primaryAction={{ content: 'Logout', onAction: () => auth.signOut() }}
         secondaryActions={[
           { content: 'New', onAction: () => this.setState({ to: '/create' }) },
           { content: 'Close' },
@@ -67,7 +67,7 @@ export default class Dashboard extends Component {
 const JobItem = ({ selected, name, category, status, jobId }) =>
   <li className="flex wrap cxe lh-copy pa3 ph0-l bb b--black-10">
     <Checkbox />
-    <Link to={`/job/${jobId}`} className="flex mxb fgrow">
+    <Link to={`/applicants/${jobId}`} className="flex mxb fgrow">
       <DisplayText size="small">
         {name}
       </DisplayText>

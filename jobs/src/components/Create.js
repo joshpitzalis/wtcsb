@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { database } from '../firebase'
+import { database, auth } from '../firebase'
 import {
   Page,
   Layout,
@@ -16,7 +16,7 @@ export default class Create extends Component {
     name: null,
     category: null,
     status: [],
-    complete: null
+    to: null
   }
 
   handleNameUpdate = e => {
@@ -51,12 +51,12 @@ export default class Create extends Component {
     return database
       .ref(`/jobs`)
       .update(updates)
-      .then(this.setState({ complete: true }))
+      .then(this.setState({ to: '/dashboard' }))
   }
 
   render() {
-    if (this.state.complete) {
-      return <Redirect to={'/dashboard'} />
+    if (this.state.to) {
+      return <Redirect to={this.state.to} />
     }
 
     return (
@@ -64,10 +64,11 @@ export default class Create extends Component {
         fullWidth
         title="Create New Job"
         separator
-        breadcrumbs={[
+        primaryAction={{ content: 'Logout', onAction: () => auth.signOut() }}
+        secondaryActions={[
           {
-            content: 'Dashboard',
-            url: '/dashboard'
+            content: 'Back to Dashboard',
+            onAction: () => this.setState({ to: '/dashboard' })
           }
         ]}
       >
