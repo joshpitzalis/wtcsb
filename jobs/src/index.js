@@ -9,7 +9,6 @@ import Job from './components/Job'
 import JobApplication from './components/JobApplication'
 import Login from './components/Login'
 import { auth } from './firebase'
-
 import registerServiceWorker from './registerServiceWorker'
 import { BrowserRouter, Route, Link, Redirect } from 'react-router-dom'
 

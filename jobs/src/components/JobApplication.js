@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { database } from '../firebase'
+import { database, storage } from '../firebase'
 import {
   Page,
   Layout,
@@ -10,13 +10,87 @@ import {
   Button
 } from '@shopify/polaris'
 import { Redirect } from 'react-router-dom'
+import Dropzone from 'react-dropzone'
+import upload from '../images/upload.png'
 
-export default class Create extends Component {
+export default class Application extends Component {
   state = {
-    name: null,
-    category: null,
+    name: undefined,
+    category: undefined,
     status: [],
-    complete: null
+    complete: undefined,
+    transferTotal1: undefined,
+    transferCurrent1: undefined,
+    transferTotal2: undefined,
+    transferCurrent2: undefined,
+    transferTotal3: undefined,
+    transferCurrent3: undefined,
+    coverLetter: undefined,
+    resume: undefined,
+    WTCSApplication: undefined
+  }
+
+  onDropCoverLetter = files => {
+    const file = files[0]
+    const uploadTask = storage
+      .ref(this.props.match.params.jobId)
+      .child(file.name)
+      .put(file, { contentType: file.type })
+    uploadTask.on('state_changed', snapshot => {
+      this.setState({
+        transferCurrent: snapshot.bytesTransferred,
+        transferTotal: snapshot.totalBytes
+      })
+    })
+    uploadTask
+      .then(snapshot =>
+        this.setState({
+          coverLetter: snapshot.downloadURL
+        })
+      )
+      .catch(error => console.error(error))
+  }
+
+  onDropWTCSApplication = files => {
+    const file = files[0]
+    const uploadTask = storage
+      .ref(this.props.match.params.jobId)
+      .child(file.name)
+      .put(file, { contentType: file.type })
+    uploadTask.on('state_changed', snapshot => {
+      this.setState({
+        transferCurrent: snapshot.bytesTransferred,
+        transferTotal: snapshot.totalBytes
+      })
+    })
+    uploadTask
+      .then(snapshot =>
+        this.setState({
+          WTCSApplication: snapshot.downloadURL
+        })
+      )
+      .catch(error => console.error(error))
+  }
+
+  onDropResume = files => {
+    const file = files[0]
+    const uploadTask = storage
+      .ref(this.props.match.params.jobId)
+      .child(file.name)
+      .put(file, { contentType: file.type })
+    uploadTask.on('state_changed', snapshot => {
+      this.setState({
+        transferCurrent: snapshot.bytesTransferred,
+        transferTotal: snapshot.totalBytes
+      })
+    })
+    uploadTask
+      .then(snapshot =>
+        this.setState({
+          resume: snapshot.downloadURL
+        })
+      )
+      .catch(error => console.error(error))
   }
 
   handleNameUpdate = e => {
@@ -30,6 +104,16 @@ export default class Create extends Component {
     email = e
     this.setState({ email })
   }
+  handlePhoneUpdate = e => {
+    let phone = this.state.phone
+    phone = e
+    this.setState({ phone })
+  }
+  handleAddressUpdate = e => {
+    let address = this.state.address
+    address = e
+    this.setState({ address })
+  }
 
   handleSubmit = () => {
     const newJobPostKey = database
@@ -38,7 +122,12 @@ export default class Create extends Component {
     var jobData = {
       id: newJobPostKey,
       name: this.state.name,
-      email: this.state.email
+      email: this.state.email,
+      phone: this.state.phone,
+      address: this.state.address,
+      coverLetter: this.state.coverLetter,
+      WTCSApplication: this.state.WTCSApplication,
+      resume: this.state.resume
     }
 
     const updates = {}
@@ -51,7 +140,7 @@ export default class Create extends Component {
 
   render() {
     if (this.state.complete) {
-      return <Redirect to={'/dashboard'} />
+      return <Redirect to={'/'} />
     }
 
     return (
@@ -68,30 +157,152 @@ export default class Create extends Component {
       >
         <Layout>
           <Layout.Section secondary>
-            <FormLayout>
-              <TextField
-                label="Your Name"
-                value={this.state.name}
-                onChange={this.handleNameUpdate}
-              />
-              <TextField
-                label="Email"
-                value={this.state.email}
-                onChange={this.handleEmailUpdate}
-              />
+            <div className="measure-wide pa4 pl0-l pl0-m">
+              <FormLayout>
+                <TextField
+                  label="Your Name"
+                  value={this.state.name}
+                  onChange={this.handleNameUpdate}
+                />
+                <TextField
+                  label="Email"
+                  type="email"
+                  value={this.state.email}
+                  onChange={this.handleEmailUpdate}
+                />
+                <TextField
+                  label="Phone Number"
+                  type="tel"
+                  value={this.state.phone}
+                  onChange={this.handlePhoneUpdate}
+                />
+                <TextField
+                  label="Address"
+                  multiline="3"
+                  value={this.state.address}
+                  onChange={this.handleAddressUpdate}
+                />
 
-              <ButtonGroup>
-                <Button onClick={() => this.setState({ complete: true })}>
-                  Cancel
-                </Button>
-                <Button primary onClick={this.handleSubmit}>
-                  Apply
-                </Button>
-              </ButtonGroup>
-            </FormLayout>
+                <CoverLetter
+                  onDrop={this.onDropCoverLetter}
+                  coverLetter={this.state.coverLetter}
+                  transferCurrent={this.state.transferCurrent1}
+                  transferTotal={this.state.transferTotal1}
+                />
+                <WTCSApplication
+                  onDrop={this.onDropWTCSApplication}
+                  WTCSApplication={this.state.WTCSApplication}
+                  transferCurrent={this.state.transferCurrent2}
+                  transferTotal={this.state.transferTotal2}
+                />
+                <Resume
+                  onDrop={this.onDropResume}
+                  resume={this.state.resume}
+                  transferCurrent={this.state.transferCurrent3}
+                  transferTotal={this.state.transferTotal3}
+                />
+
+                <ButtonGroup>
+                  <Button onClick={() => this.setState({ complete: true })}>
+                    Cancel
+                  </Button>
+                  <Button primary onClick={this.handleSubmit}>
+                    Apply
+                  </Button>
+                </ButtonGroup>
+              </FormLayout>
+            </div>
           </Layout.Section>
         </Layout>
       </Page>
     )
   }
 }
+
+const CoverLetter = ({
+  onDrop,
+  coverLetter,
+  transferCurrent,
+  transferTotal
+}) => (
+  <Dropzone
+    className="ba w5 br3 pa3 flex col mxc cxc h-100 pointer dim w-100 dim-hover"
+    style={{ borderColor: '#c4cdd5' }}
+    onDrop={onDrop}
+  >
+    {coverLetter ? (
+      <p>Cover letter uploaded. Click here to upload a new one.</p>
+    ) : (
+      <div className="tc">
+        <img
+          src={upload}
+          alt="Drag COVER LETTER here to upload."
+          className="respond"
+        />
+        <p className="tc pt3">Drag COVER LETTER here to upload.</p>
+      </div>
+    )}
+
+    {transferCurrent !== 0 &&
+      transferCurrent !== transferTotal && (
+        <progress value={transferCurrent} max={transferTotal} />
+      )}
+  </Dropzone>
+)
+
+const WTCSApplication = ({
+  onDrop,
+  WTCSApplication,
+  transferCurrent,
+  transferTotal
+}) => (
+  <Dropzone
+    className="ba w5 br3 pa3 flex col mxc cxc h-100 pointer dim w-100 dim-hover"
+    style={{ borderColor: '#c4cdd5' }}
+    onDrop={onDrop}
+  >
+    {WTCSApplication ? (
+      <p>WTCS Application uploaded. Click here to upload a new one.</p>
+    ) : (
+      <div className="tc">
+        <img
+          src={upload}
+          alt="Drag WTCS Application here to upload."
+          className="respond"
+        />
+        <p className="tc pt3">Drag WTCS Application here to upload.</p>
+      </div>
+    )}
+
+    {transferCurrent !== 0 &&
+      transferCurrent !== transferTotal && (
+        <progress value={transferCurrent} max={transferTotal} />
+      )}
+  </Dropzone>
+)
+
+const Resume = ({ onDrop, resume, transferCurrent, transferTotal }) => (
+  <Dropzone
+    className="ba w5 br3 pa3 flex col mxc cxc h-100 pointer dim w-100 dim-hover"
+    style={{ borderColor: '#c4cdd5' }}
+    onDrop={onDrop}
+  >
+    {resume ? (
+      <p>Resume uploaded. Click here to upload a new one.</p>
+    ) : (
+      <div className="tc">
+        <img
+          src={upload}
+          alt="Drag your resume here to upload."
+          className="respond"
+        />
+        <p className="tc pt3">Drag your resume here to upload.</p>
+      </div>
+    )}
+
+    {transferCurrent !== 0 &&
+      transferCurrent !== transferTotal && (
+        <progress value={transferCurrent} max={transferTotal} />
+      )}
+  </Dropzone>
+)
