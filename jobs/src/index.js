@@ -65,7 +65,8 @@ class App extends Component {
             component={Dashboard}
             authed={this.state.authed}
           />
-          <PrivateRoute
+          {/* <PrivateRoute */}
+          <Route
             exact
             path="/create"
             component={Create}

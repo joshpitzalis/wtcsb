@@ -178,7 +178,7 @@ export default class Application extends Component {
                 />
                 <TextField
                   label="Address"
-                  multiline="3"
+                  multiline={3}
                   value={this.state.address}
                   onChange={this.handleAddressUpdate}
                 />

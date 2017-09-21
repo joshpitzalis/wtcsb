@@ -6,7 +6,8 @@ import {
   Layout,
   TextStyle,
   Checkbox,
-  DisplayText
+  DisplayText,
+  Button
 } from '@shopify/polaris'
 
 export default class Applicants extends Component {
@@ -38,28 +39,35 @@ export default class Applicants extends Component {
           {
             content: 'Edit this Job',
             onAction: () =>
-            this.setState({ to: `/edit/${this.props.match.params.jobId}` })
+              this.setState({ to: `/edit/${this.props.match.params.jobId}` })
           }
         ]}
       >
         <Layout>
           <Layout.Section>
-            <ul className="list pl0 mt0 center">
-              <li className="flex mxb wrap cxe lh-copy pa3 ph0-l bb b--black-10">
-                <DisplayText size="medium">Name</DisplayText>
-                <DisplayText size="medium">Contact</DisplayText>
-                <DisplayText size="medium">Submissions</DisplayText>
-              </li>
-            </ul>
+            <div className="w-100 flex">
+              <div className="w-33 tl ">
+                <DisplayText size="small">Name</DisplayText>
+              </div>
+              <div className="w-33 tl">
+                <DisplayText size="small">Contact</DisplayText>
+              </div>
+              <div className="w-33 tl">
+                <DisplayText size="small">Submissions</DisplayText>
+              </div>
+            </div>
             <ul className="list pl0 mt0 center">
               {this.state.applicants &&
-                this.state.applicants.map((applicant, index) =>
+                this.state.applicants.map((applicant, index) => (
                   <Applicant
                     name={applicant.name}
                     email={applicant.email}
-                    cv={applicant.cv}
+                    cv={applicant.coverLetter}
+                    application={applicant.WTCSApplication}
+                    resume={applicant.resume}
+                    address={applicant.address}
                   />
-                )}
+                ))}
             </ul>
           </Layout.Section>
         </Layout>
@@ -68,17 +76,43 @@ export default class Applicants extends Component {
   }
 }
 
-const Applicant = ({ name, email, cv }) =>
-  <li className="flex mxb wrap cxe lh-copy pa3 ph0-l bb b--black-10">
-    <div className="flex cxc">
-      <DisplayText size="small">
-        {name}
-      </DisplayText>
+const Applicant = ({ name, email, cv, application, resume, address }) => (
+  <li className="flex wrap mxb cxs lh-copy pa3 ph0-l bb b--black-10">
+    <div className="w-33-l w-33-m w-100">
+      <DisplayText>{name}</DisplayText>
     </div>
-    <DisplayText size="small">
-      {email}
-    </DisplayText>
-    <DisplayText size="small">
-      {cv}
-    </DisplayText>
+    <div className="w-33-l w-33-m w-100">
+      <DisplayText>{email}</DisplayText>
+    </div>
+
+    <div className="flex col h5 mxa w-33-l w-33-m w-100">
+      <div>
+        {cv && (
+          <Button size="slim">
+            <a href={cv} download>
+              Download Cover Letter
+            </a>
+          </Button>
+        )}
+      </div>
+      <div>
+        {application && (
+          <Button size="slim">
+            <a href={application} download>
+              Download Application
+            </a>
+          </Button>
+        )}
+      </div>
+      <div>
+        {resume && (
+          <Button size="slim">
+            <a href={resume} download>
+              Download Resume
+            </a>
+          </Button>
+        )}
+      </div>
+    </div>
   </li>
+)

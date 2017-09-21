@@ -37,16 +37,16 @@ export default class Dashboard extends Component {
         <Layout>
           <Layout.Section>
             <ul className="list pl0 mt0 center">
-              <li className="flex mxb wrap cxe lh-copy pa3 ph0-l bb b--black-10">
-                <DisplayText size="medium">Description</DisplayText>
+              <li className="flex mxb wrap cxe lh-copy pa3 ph0-l">
+                <DisplayText size="small">Description</DisplayText>
 
-                <DisplayText size="medium">Category</DisplayText>
-                <DisplayText size="medium">Status</DisplayText>
+                <DisplayText size="small">Category</DisplayText>
+                <DisplayText size="small">Status</DisplayText>
               </li>
             </ul>
             <ul className="list pl0 mt0 center">
               {this.state.jobs &&
-                this.state.jobs.map((job, index) =>
+                this.state.jobs.map((job, index) => (
                   <JobItem
                     key={index}
                     selected={false}
@@ -55,7 +55,7 @@ export default class Dashboard extends Component {
                     status={job.status[0]}
                     jobId={job.id}
                   />
-                )}
+                ))}
             </ul>
           </Layout.Section>
         </Layout>
@@ -64,18 +64,13 @@ export default class Dashboard extends Component {
   }
 }
 
-const JobItem = ({ selected, name, category, status, jobId }) =>
+const JobItem = ({ selected, name, category, status, jobId }) => (
   <li className="flex wrap cxe lh-copy pa3 ph0-l bb b--black-10">
     <Checkbox />
     <Link to={`/applicants/${jobId}`} className="flex mxb fgrow">
-      <DisplayText size="small">
-        {name}
-      </DisplayText>
-      <DisplayText size="small">
-        {category}
-      </DisplayText>
-      <DisplayText size="small">
-        {status}
-      </DisplayText>
+      <DisplayText>{name}</DisplayText>
+      <DisplayText>{category}</DisplayText>
+      <DisplayText>{status}</DisplayText>
     </Link>
   </li>
+)
