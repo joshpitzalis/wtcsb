@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { auth } from '../firebase'
+import firebase from 'firebase'
 import {
   Page,
   Layout,
@@ -13,8 +14,8 @@ import { Redirect } from 'react-router-dom'
 
 export default class Login extends Component {
   state = {
-    email: null,
-    password: null,
+    email: '',
+    password: '',
     error: null,
     to: null
   }
@@ -33,14 +34,23 @@ export default class Login extends Component {
 
   handleSubmit = () => {
     auth
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(this.setState({ to: '/dashboard' }))
+      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(() => {
+        return auth
+          .signInWithEmailAndPassword(this.state.email, this.state.password)
+          .then(this.setState({ to: '/dashboard' }))
+          .catch(error => this.setState({ error: error.message }))
+      })
       .catch(error => this.setState({ error: error.message }))
   }
 
   render() {
     if (this.state.to) {
       return <Redirect to={this.state.to} />
+    }
+
+    if (this.props.authed) {
+      return <Redirect to={'/dashboard'} />
     }
 
     return (

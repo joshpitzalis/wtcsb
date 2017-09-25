@@ -17,13 +17,57 @@ export default class Create extends Component {
     category: undefined,
     name: undefined,
     position: undefined,
-    status: [],
-    to: undefined,
     location: undefined,
     statement: undefined,
     education: undefined,
     salary: undefined,
-    info: undefined
+    info: undefined,
+    experience: undefined,
+    hours: [],
+    licensure: [],
+    status: ['open'],
+    to: null
+  }
+
+  //
+  // handleInputChange(event) {
+  //   const target = event.target;
+  //   const value = target.type === 'checkbox' ? target.checked : target.value;
+  //   const name = target.name;
+  //
+  //   this.setState({
+  //     [name]: value
+  //   });
+  // }
+
+  handleCategoryUpdate = e => {
+    let category = this.state.category
+    category = e
+    this.setState({ category })
+  }
+
+  handleLocationUpdate = e => {
+    let location = this.state.location
+    location = e
+    this.setState({ location })
+  }
+
+  handleEducationUpdate = e => {
+    let education = this.state.education
+    education = e
+    this.setState({ education })
+  }
+
+  handleSalaryUpdate = e => {
+    let salary = this.state.salary
+    salary = e
+    this.setState({ salary })
+  }
+
+  handleExperienceUpdate = e => {
+    let experience = this.state.experience
+    experience = e
+    this.setState({ experience })
   }
 
   handleNameUpdate = e => {
@@ -38,10 +82,10 @@ export default class Create extends Component {
     this.setState({ position })
   }
 
-  handleStatusUpdate = e => {
-    let status = this.state.status
-    status = e
-    this.setState({ status })
+  handleLicensureUpdate = e => {
+    let licensure = this.state.licensure
+    licensure = e
+    this.setState({ licensure })
   }
 
   handleStatementUpdate = e => {
@@ -56,21 +100,40 @@ export default class Create extends Component {
     this.setState({ info })
   }
 
+  handleHoursUpdate = e => {
+    let hours = this.state.hours
+    hours = e
+    this.setState({ hours })
+  }
+
   handleSubmit = () => {
     const newJobPostKey = database.ref(`/jobs`).push().key
+    console.log(newJobPostKey)
     var jobData = {
       id: newJobPostKey,
-      name: this.state.name,
-      category: this.state.category,
-      status: this.state.status
+      name: this.state.name || null,
+      category: this.state.category || null,
+      position: this.state.position || null,
+      location: this.state.location || null,
+      statement: this.state.statement || null,
+      education: this.state.education || null,
+      salary: this.state.salary || null,
+      licensure: this.state.licensure || null,
+      info: this.state.info || null,
+      experience: this.state.experience || null,
+      hours: this.state.hours || null,
+      status: this.state.status || null,
+      to: this.state.to
     }
 
-    const updates = {}
-    updates[newJobPostKey] = jobData
+    var updates = {}
+    updates[`/jobs/${newJobPostKey}`] = jobData
+
     return database
-      .ref(`/jobs`)
+      .ref()
       .update(updates)
       .then(this.setState({ to: '/dashboard' }))
+      .catch(error => console.log(error.message))
   }
 
   render() {
@@ -96,6 +159,7 @@ export default class Create extends Component {
             <div className="measure-wide pa4 pl0-l pl0-m">
               <FormLayout>
                 <Select
+                  id="createFormCategory"
                   label="Category"
                   options={[
                     'Clinical',
@@ -111,18 +175,22 @@ export default class Create extends Component {
                   ]}
                   placeholder="Pick a Category"
                   value={this.state.category}
+                  onChange={this.handleCategoryUpdate}
                 />
                 <TextField
+                  id="createFormTitle"
                   label="Job Title"
                   value={this.state.name}
                   onChange={this.handleNameUpdate}
                 />
                 <TextField
+                  id="createFormPosition"
                   label="Position"
                   value={this.state.position}
                   onChange={this.handlePositionUpdate}
                 />
                 <Select
+                  id="createFormLocation"
                   label="Location"
                   options={[
                     'Suffolk',
@@ -133,14 +201,17 @@ export default class Create extends Component {
                   ]}
                   placeholder="Pick a Location"
                   value={this.state.location}
+                  onChange={this.handleLocationUpdate}
                 />
                 <TextField
+                  id="createFormResponsibilities"
                   label="General Statement of Responsibilities"
                   value={this.state.statement}
                   onChange={this.handleStatementUpdate}
                   multiline={5}
                 />
                 <Select
+                  id="createFormEducation"
                   label="Education"
                   options={[
                     'Associates',
@@ -156,6 +227,7 @@ export default class Create extends Component {
                   ]}
                   placeholder="Pick a Location"
                   value={this.state.education}
+                  onChange={this.handleEducationUpdate}
                 />
                 <ChoiceList
                   allowMultiple
@@ -174,9 +246,11 @@ export default class Create extends Component {
                       value: 'rotating'
                     }
                   ]}
-                  selected={[]}
+                  selected={this.state.hours}
+                  onChange={this.handleHoursUpdate}
                 />
                 <Select
+                  id="createFormSalary"
                   label="Salary"
                   options={[
                     'Less than $25K',
@@ -186,9 +260,11 @@ export default class Create extends Component {
                     'More than $100K'
                   ]}
                   placeholder="Pick a Salary"
-                  value={[]}
+                  value={this.state.salary}
+                  onChange={this.handleSalaryUpdate}
                 />
                 <ChoiceList
+                  id="createFormLicensure"
                   title="Licensure Status"
                   choices={[
                     {
@@ -236,21 +312,25 @@ export default class Create extends Component {
                       value: 'RN'
                     }
                   ]}
-                  selected={[]}
+                  selected={this.state.licensure}
+                  onChange={this.handleLicensureUpdate}
                 />
                 <Select
+                  id="createFormExperience"
                   label="Experience"
                   options={[
                     'None',
                     '1 year',
                     '3 years',
                     '5 years',
-                    'More than $100K'
+                    'More than 5 years'
                   ]}
                   placeholder="Pick a Salary"
-                  value={[]}
+                  value={this.state.experience}
+                  onChange={this.handleExperienceUpdate}
                 />
                 <TextField
+                  id="createFormInfo"
                   label="Additional Information "
                   value={this.state.info}
                   onChange={this.handleInfoUpdate}
@@ -261,8 +341,12 @@ export default class Create extends Component {
                   <Button onClick={() => this.setState({ complete: true })}>
                     Cancel
                   </Button>
-                  <Button primary onClick={this.handleSubmit}>
-                    Create
+                  <Button
+                    primary
+                    onClick={this.handleSubmit}
+                    id="createFormSubmit"
+                  >
+                    Create Job
                   </Button>
                 </ButtonGroup>
               </FormLayout>

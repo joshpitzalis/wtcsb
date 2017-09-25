@@ -18,9 +18,11 @@ export default class Applicants extends Component {
   componentDidMount() {
     database
       .ref(`jobs/${this.props.match.params.jobId}/applicants`)
-      .on('value', snap =>
-        this.setState({ applicants: Object.values(snap.val()) })
-      )
+      .on('value', snap => {
+        if (snap.val()) {
+          this.setState({ applicants: Object.values(snap.val()) })
+        }
+      })
   }
   render() {
     if (this.state.to) {
@@ -57,7 +59,7 @@ export default class Applicants extends Component {
               </div>
             </div>
             <ul className="list pl0 mt0 center">
-              {this.state.applicants &&
+              {this.state.applicants ? (
                 this.state.applicants.map((applicant, index) => (
                   <Applicant
                     name={applicant.name}
@@ -67,7 +69,12 @@ export default class Applicants extends Component {
                     resume={applicant.resume}
                     address={applicant.address}
                   />
-                ))}
+                ))
+              ) : (
+                <div className="pt5 tc">
+                  <DisplayText size="large">No Applicants yet</DisplayText>
+                </div>
+              )}
             </ul>
           </Layout.Section>
         </Layout>
@@ -81,8 +88,9 @@ const Applicant = ({ name, email, cv, application, resume, address }) => (
     <div className="w-33-l w-33-m w-100">
       <DisplayText>{name}</DisplayText>
     </div>
-    <div className="w-33-l w-33-m w-100">
+    <div className="w-33-l w-33-m w-100 overflow-hidden">
       <DisplayText>{email}</DisplayText>
+      <DisplayText>{address}</DisplayText>
     </div>
 
     <div className="flex col h5 mxa w-33-l w-33-m w-100">

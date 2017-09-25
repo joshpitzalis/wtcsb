@@ -121,13 +121,13 @@ export default class Application extends Component {
       .push().key
     var jobData = {
       id: newJobPostKey,
-      name: this.state.name,
-      email: this.state.email,
-      phone: this.state.phone,
-      address: this.state.address,
-      coverLetter: this.state.coverLetter,
-      WTCSApplication: this.state.WTCSApplication,
-      resume: this.state.resume
+      name: this.state.name || null,
+      email: this.state.email || null,
+      phone: this.state.phone || null,
+      address: this.state.address || null,
+      coverLetter: this.state.coverLetter || null,
+      WTCSApplication: this.state.WTCSApplication || null,
+      resume: this.state.resume || null
     }
 
     const updates = {}
@@ -135,23 +135,23 @@ export default class Application extends Component {
     return database
       .ref(`/jobs/${this.props.match.params.jobId}/applicants`)
       .update(updates)
-      .then(this.setState({ complete: true }))
+      .then(this.setState({ to: '/' }))
   }
 
   render() {
-    if (this.state.complete) {
-      return <Redirect to={'/'} />
+    if (this.state.to) {
+      return <Redirect to={this.state.to} />
     }
 
     return (
       <Page
         fullWidth
-        title="Create New Job"
+        title={`Job Application Form`}
         separator
         secondaryActions={[
           {
-            content: 'Back to Dashboard',
-            onAction: () => this.setState({ to: '/dashboard' })
+            content: 'Back to Homepage',
+            onAction: () => this.setState({ to: '/' })
           }
         ]}
       >
@@ -160,23 +160,27 @@ export default class Application extends Component {
             <div className="measure-wide pa4 pl0-l pl0-m">
               <FormLayout>
                 <TextField
+                  id="jobApplicationName"
                   label="Your Name"
                   value={this.state.name}
                   onChange={this.handleNameUpdate}
                 />
                 <TextField
+                  id="jobApplicationEmail"
                   label="Email"
                   type="email"
                   value={this.state.email}
                   onChange={this.handleEmailUpdate}
                 />
                 <TextField
+                  id="jobApplicationPhone"
                   label="Phone Number"
                   type="tel"
                   value={this.state.phone}
                   onChange={this.handlePhoneUpdate}
                 />
                 <TextField
+                  id="jobApplicationAddress"
                   label="Address"
                   multiline={3}
                   value={this.state.address}
@@ -203,11 +207,11 @@ export default class Application extends Component {
                 />
 
                 <ButtonGroup>
-                  <Button onClick={() => this.setState({ complete: true })}>
+                  <Button onClick={() => this.setState({ to: '/' })}>
                     Cancel
                   </Button>
                   <Button primary onClick={this.handleSubmit}>
-                    Apply
+                    Apply To Job
                   </Button>
                 </ButtonGroup>
               </FormLayout>

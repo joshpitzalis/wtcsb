@@ -36,14 +36,17 @@ export default class Dashboard extends Component {
       >
         <Layout>
           <Layout.Section>
-            <ul className="list pl0 mt0 center">
-              <li className="flex mxb wrap cxe lh-copy pa3 ph0-l">
+            <div className="w-100 flex">
+              <div className="w-33 tl pl4">
                 <DisplayText size="small">Description</DisplayText>
-
+              </div>
+              <div className="w-33 tl pl4">
                 <DisplayText size="small">Category</DisplayText>
+              </div>
+              <div className="w-33 tl pl4">
                 <DisplayText size="small">Status</DisplayText>
-              </li>
-            </ul>
+              </div>
+            </div>
             <ul className="list pl0 mt0 center">
               {this.state.jobs &&
                 this.state.jobs.map((job, index) => (
@@ -65,12 +68,18 @@ export default class Dashboard extends Component {
 }
 
 const JobItem = ({ selected, name, category, status, jobId }) => (
-  <li className="flex wrap cxe lh-copy pa3 ph0-l bb b--black-10">
+  <li className="flex wrap cxc lh-copy pa3 ph0-l bb b--black-10">
     <Checkbox />
     <Link to={`/applicants/${jobId}`} className="flex mxb fgrow">
-      <DisplayText>{name}</DisplayText>
-      <DisplayText>{category}</DisplayText>
-      <DisplayText>{status}</DisplayText>
+      <div className="w-33-l w-33-m w-100 overflow-hidden">
+        <DisplayText>{name}</DisplayText>
+      </div>
+      <div className="w-33-l w-33-m w-100 overflow-hidden">
+        <DisplayText>{category}</DisplayText>
+      </div>
+      <div className="w-33-l w-33-m w-100 overflow-hidden">
+        <DisplayText>{status}</DisplayText>
+      </div>
     </Link>
   </li>
 )

@@ -8,6 +8,7 @@ import Applicants from './components/Applicants'
 import Job from './components/Job'
 import JobApplication from './components/JobApplication'
 import Login from './components/Login'
+// import Login from './components/LoginWithoutPolaris'
 import { auth } from './firebase'
 import registerServiceWorker from './registerServiceWorker'
 import { BrowserRouter, Route, Link, Redirect } from 'react-router-dom'
@@ -16,6 +17,17 @@ import { BrowserRouter, Route, Link, Redirect } from 'react-router-dom'
 const renderMergedProps = (component, ...rest) => {
   const finalProps = Object.assign({}, ...rest)
   return React.createElement(component, finalProps)
+}
+
+const PropsRoute = ({ component, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={routeProps => {
+        return renderMergedProps(component, routeProps, rest)
+      }}
+    />
+  )
 }
 
 const PrivateRoute = ({ component, authed, ...rest }) => {
@@ -86,7 +98,12 @@ class App extends Component {
           />
           <Route exact path="/job/:jobId" component={Job} />
           <Route exact path="/apply/:jobId" component={JobApplication} />
-          <Route exact path="/login" component={Login} />
+          <PropsRoute
+            exact
+            path="/login"
+            component={Login}
+            authed={this.state.authed}
+          />
         </div>
       </BrowserRouter>
     )
