@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { database, storage } from '../firebase'
+import React, { Component } from 'react';
+import { database, storage } from '../firebase';
 import {
   Page,
   Layout,
@@ -8,10 +8,10 @@ import {
   ChoiceList,
   ButtonGroup,
   Button
-} from '@shopify/polaris'
-import { Redirect } from 'react-router-dom'
-import Dropzone from 'react-dropzone'
-import upload from '../images/upload.png'
+} from '@shopify/polaris';
+import { Redirect } from 'react-router-dom';
+import Dropzone from 'react-dropzone';
+import upload from '../images/upload.png';
 
 export default class Application extends Component {
   state = {
@@ -28,97 +28,97 @@ export default class Application extends Component {
     coverLetter: undefined,
     resume: undefined,
     WTCSApplication: undefined
-  }
+  };
 
   onDropCoverLetter = files => {
-    const file = files[0]
+    const file = files[0];
     const uploadTask = storage
       .ref(this.props.match.params.jobId)
       .child(file.name)
-      .put(file, { contentType: file.type })
+      .put(file, { contentType: file.type });
     uploadTask.on('state_changed', snapshot => {
       this.setState({
         transferCurrent: snapshot.bytesTransferred,
         transferTotal: snapshot.totalBytes
-      })
-    })
+      });
+    });
     uploadTask
       .then(snapshot =>
         this.setState({
           coverLetter: snapshot.downloadURL
         })
       )
-      .catch(error => console.error(error))
-  }
+      .catch(error => console.error(error));
+  };
 
   onDropWTCSApplication = files => {
-    const file = files[0]
+    const file = files[0];
     const uploadTask = storage
       .ref(this.props.match.params.jobId)
       .child(file.name)
-      .put(file, { contentType: file.type })
+      .put(file, { contentType: file.type });
     uploadTask.on('state_changed', snapshot => {
       this.setState({
         transferCurrent: snapshot.bytesTransferred,
         transferTotal: snapshot.totalBytes
-      })
-    })
+      });
+    });
     uploadTask
       .then(snapshot =>
         this.setState({
           WTCSApplication: snapshot.downloadURL
         })
       )
-      .catch(error => console.error(error))
-  }
+      .catch(error => console.error(error));
+  };
 
   onDropResume = files => {
-    const file = files[0]
+    const file = files[0];
     const uploadTask = storage
       .ref(this.props.match.params.jobId)
       .child(file.name)
-      .put(file, { contentType: file.type })
+      .put(file, { contentType: file.type });
     uploadTask.on('state_changed', snapshot => {
       this.setState({
         transferCurrent: snapshot.bytesTransferred,
         transferTotal: snapshot.totalBytes
-      })
-    })
+      });
+    });
     uploadTask
       .then(snapshot =>
         this.setState({
           resume: snapshot.downloadURL
         })
       )
-      .catch(error => console.error(error))
-  }
+      .catch(error => console.error(error));
+  };
 
   handleNameUpdate = e => {
-    let name = this.state.name
-    name = e
-    this.setState({ name })
-  }
+    let name = this.state.name;
+    name = e;
+    this.setState({ name });
+  };
 
   handleEmailUpdate = e => {
-    let email = this.state.email
-    email = e
-    this.setState({ email })
-  }
+    let email = this.state.email;
+    email = e;
+    this.setState({ email });
+  };
   handlePhoneUpdate = e => {
-    let phone = this.state.phone
-    phone = e
-    this.setState({ phone })
-  }
+    let phone = this.state.phone;
+    phone = e;
+    this.setState({ phone });
+  };
   handleAddressUpdate = e => {
-    let address = this.state.address
-    address = e
-    this.setState({ address })
-  }
+    let address = this.state.address;
+    address = e;
+    this.setState({ address });
+  };
 
   handleSubmit = () => {
     const newJobPostKey = database
       .ref(`/jobs/${this.props.match.params.jobId}/applicants`)
-      .push().key
+      .push().key;
     var jobData = {
       id: newJobPostKey,
       name: this.state.name || null,
@@ -128,19 +128,19 @@ export default class Application extends Component {
       coverLetter: this.state.coverLetter || null,
       WTCSApplication: this.state.WTCSApplication || null,
       resume: this.state.resume || null
-    }
+    };
 
-    const updates = {}
-    updates[newJobPostKey] = jobData
+    const updates = {};
+    updates[newJobPostKey] = jobData;
     return database
       .ref(`/jobs/${this.props.match.params.jobId}/applicants`)
       .update(updates)
-      .then(this.setState({ to: '/' }))
-  }
+      .then(this.setState({ to: '/' }));
+  };
 
   render() {
     if (this.state.to) {
-      return <Redirect to={this.state.to} />
+      return <Redirect to={this.state.to} />;
     }
 
     return (
@@ -219,7 +219,7 @@ export default class Application extends Component {
           </Layout.Section>
         </Layout>
       </Page>
-    )
+    );
   }
 }
 
@@ -252,7 +252,7 @@ const CoverLetter = ({
         <progress value={transferCurrent} max={transferTotal} />
       )}
   </Dropzone>
-)
+);
 
 const WTCSApplication = ({
   onDrop,
@@ -283,7 +283,7 @@ const WTCSApplication = ({
         <progress value={transferCurrent} max={transferTotal} />
       )}
   </Dropzone>
-)
+);
 
 const Resume = ({ onDrop, resume, transferCurrent, transferTotal }) => (
   <Dropzone
@@ -309,4 +309,4 @@ const Resume = ({ onDrop, resume, transferCurrent, transferTotal }) => (
         <progress value={transferCurrent} max={transferTotal} />
       )}
   </Dropzone>
-)
+);

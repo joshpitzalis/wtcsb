@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import { database, auth } from '../firebase'
-import { Redirect } from 'react-router-dom'
+import React, { Component } from 'react';
+import { database, auth } from '../firebase';
+import { Redirect } from 'react-router-dom';
 import {
   Page,
   Layout,
@@ -8,30 +8,40 @@ import {
   Checkbox,
   DisplayText,
   Button
-} from '@shopify/polaris'
+} from '@shopify/polaris';
 
 export default class Applicants extends Component {
-  state = {
-    applicants: null,
-    to: null
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: null,
+      applicants: null,
+      to: null
+    };
   }
+
   componentDidMount() {
-    database
-      .ref(`jobs/${this.props.match.params.jobId}/applicants`)
-      .on('value', snap => {
-        if (snap.val()) {
-          this.setState({ applicants: Object.values(snap.val()) })
-        }
-      })
+    database.ref(`jobs/${this.props.match.params.jobId}`).on('value', snap => {
+      if (snap.val().applicants) {
+        this.setState({
+          applicants: Object.values(snap.val().applicants),
+          name: snap.val().name || null
+        });
+      } else {
+        this.setState({
+          name: snap.val().name
+        });
+      }
+    });
   }
   render() {
     if (this.state.to) {
-      return <Redirect to={this.state.to} />
+      return <Redirect to={this.state.to} />;
     }
     return (
       <Page
         fullWidth
-        title={this.state.job && this.state.job[0]}
+        title={this.state.name && this.state.name}
         primaryAction={{ content: 'Logout', onAction: () => auth.signOut() }}
         secondaryActions={[
           {
@@ -68,6 +78,7 @@ export default class Applicants extends Component {
                     application={applicant.WTCSApplication}
                     resume={applicant.resume}
                     address={applicant.address}
+                    key={index}
                   />
                 ))
               ) : (
@@ -79,7 +90,7 @@ export default class Applicants extends Component {
           </Layout.Section>
         </Layout>
       </Page>
-    )
+    );
   }
 }
 
@@ -90,7 +101,7 @@ const Applicant = ({ name, email, cv, application, resume, address }) => (
     </div>
     <div className="w-33-l w-33-m w-100 overflow-hidden">
       <DisplayText>{email}</DisplayText>
-      <DisplayText>{address}</DisplayText>
+      <DisplayText size="small">{address}</DisplayText>
     </div>
 
     <div className="flex col h5 mxa w-33-l w-33-m w-100">
@@ -123,4 +134,4 @@ const Applicant = ({ name, email, cv, application, resume, address }) => (
       </div>
     </div>
   </li>
-)
+);
