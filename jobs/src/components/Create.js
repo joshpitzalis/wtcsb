@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { database, auth } from '../firebase'
+import React, { Component } from 'react';
+import { database, auth } from '../firebase';
 import {
   Page,
   Layout,
@@ -9,8 +9,8 @@ import {
   ButtonGroup,
   Button,
   Select
-} from '@shopify/polaris'
-import { Redirect } from 'react-router-dom'
+} from '@shopify/polaris';
+import { Redirect } from 'react-router-dom';
 
 export default class Create extends Component {
   state = {
@@ -23,11 +23,11 @@ export default class Create extends Component {
     salary: undefined,
     info: undefined,
     experience: undefined,
-    hours: [],
+    hours: 'TBD',
     licensure: [],
     status: ['open'],
     to: null
-  }
+  };
 
   //
   // handleInputChange(event) {
@@ -41,74 +41,74 @@ export default class Create extends Component {
   // }
 
   handleCategoryUpdate = e => {
-    let category = this.state.category
-    category = e
-    this.setState({ category })
-  }
+    let category = this.state.category;
+    category = e;
+    this.setState({ category });
+  };
 
   handleLocationUpdate = e => {
-    let location = this.state.location
-    location = e
-    this.setState({ location })
-  }
+    let location = this.state.location;
+    location = e;
+    this.setState({ location });
+  };
 
   handleEducationUpdate = e => {
-    let education = this.state.education
-    education = e
-    this.setState({ education })
-  }
+    let education = this.state.education;
+    education = e;
+    this.setState({ education });
+  };
 
   handleSalaryUpdate = e => {
-    let salary = this.state.salary
-    salary = e
-    this.setState({ salary })
-  }
+    let salary = this.state.salary;
+    salary = e;
+    this.setState({ salary });
+  };
 
   handleExperienceUpdate = e => {
-    let experience = this.state.experience
-    experience = e
-    this.setState({ experience })
-  }
+    let experience = this.state.experience;
+    experience = e;
+    this.setState({ experience });
+  };
 
   handleNameUpdate = e => {
-    let name = this.state.name
-    name = e
-    this.setState({ name })
-  }
+    let name = this.state.name;
+    name = e;
+    this.setState({ name });
+  };
 
   handlePositionUpdate = e => {
-    let position = this.state.position
-    position = e
-    this.setState({ position })
-  }
+    let position = this.state.position;
+    position = e;
+    this.setState({ position });
+  };
 
   handleLicensureUpdate = e => {
-    let licensure = this.state.licensure
-    licensure = e
-    this.setState({ licensure })
-  }
+    let licensure = this.state.licensure;
+    licensure = e;
+    this.setState({ licensure });
+  };
 
   handleStatementUpdate = e => {
-    let statement = this.state.statement
-    statement = e
-    this.setState({ statement })
-  }
+    let statement = this.state.statement;
+    statement = e;
+    this.setState({ statement });
+  };
 
   handleInfoUpdate = e => {
-    let info = this.state.info
-    info = e
-    this.setState({ info })
-  }
+    let info = this.state.info;
+    info = e;
+    this.setState({ info });
+  };
 
   handleHoursUpdate = e => {
-    let hours = this.state.hours
-    hours = e
-    this.setState({ hours })
-  }
+    let hours = this.state.hours;
+    hours = e;
+    this.setState({ hours });
+  };
 
   handleSubmit = () => {
-    const newJobPostKey = database.ref(`/jobs`).push().key
-    console.log(newJobPostKey)
+    const newJobPostKey = database.ref(`/jobs`).push().key;
+
     var jobData = {
       id: newJobPostKey,
       name: this.state.name || null,
@@ -124,21 +124,21 @@ export default class Create extends Component {
       hours: this.state.hours || null,
       status: this.state.status || null,
       to: this.state.to
-    }
+    };
 
-    var updates = {}
-    updates[`/jobs/${newJobPostKey}`] = jobData
+    var updates = {};
+    updates[`/jobs/${newJobPostKey}`] = jobData;
 
     return database
       .ref()
       .update(updates)
       .then(this.setState({ to: '/dashboard' }))
-      .catch(error => console.log(error.message))
-  }
+      .catch(error => console.log(error.message));
+  };
 
   render() {
     if (this.state.to) {
-      return <Redirect to={this.state.to} />
+      return <Redirect to={this.state.to} />;
     }
 
     return (
@@ -171,23 +171,26 @@ export default class Create extends Component {
                     'Administrative',
                     'Medical',
                     'Psychiatrist',
-                    'Other'
+                    'Other Categories'
                   ]}
                   placeholder="Pick a Category"
                   value={this.state.category}
                   onChange={this.handleCategoryUpdate}
+                  // error={'hello'}
                 />
                 <TextField
                   id="createFormTitle"
                   label="Job Title"
                   value={this.state.name}
                   onChange={this.handleNameUpdate}
+                  type="text"
                 />
                 <TextField
                   id="createFormPosition"
                   label="Position"
                   value={this.state.position}
                   onChange={this.handlePositionUpdate}
+                  type="text"
                 />
                 <Select
                   id="createFormLocation"
@@ -197,11 +200,12 @@ export default class Create extends Component {
                     'Isle of Wight',
                     'Southampton',
                     'Franklin',
-                    'Other'
+                    'other locations'
                   ]}
                   placeholder="Pick a Location"
                   value={this.state.location}
                   onChange={this.handleLocationUpdate}
+                  required
                 />
                 <TextField
                   id="createFormResponsibilities"
@@ -209,6 +213,7 @@ export default class Create extends Component {
                   value={this.state.statement}
                   onChange={this.handleStatementUpdate}
                   multiline={5}
+                  type="text"
                 />
                 <Select
                   id="createFormEducation"
@@ -225,7 +230,7 @@ export default class Create extends Component {
                     'NP',
                     'PA'
                   ]}
-                  placeholder="Pick a Location"
+                  placeholder="Pick a Qualification"
                   value={this.state.education}
                   onChange={this.handleEducationUpdate}
                 />
@@ -253,6 +258,7 @@ export default class Create extends Component {
                   id="createFormSalary"
                   label="Salary"
                   options={[
+                    'To be decided',
                     'Less than $25K',
                     '$25K - $40K',
                     '$40K - $60K',
@@ -325,7 +331,7 @@ export default class Create extends Component {
                     '5 years',
                     'More than 5 years'
                   ]}
-                  placeholder="Pick a Salary"
+                  placeholder="Pick a level of experience"
                   value={this.state.experience}
                   onChange={this.handleExperienceUpdate}
                 />
@@ -335,6 +341,7 @@ export default class Create extends Component {
                   value={this.state.info}
                   onChange={this.handleInfoUpdate}
                   multiline={3}
+                  type="text"
                 />
 
                 <ButtonGroup>
@@ -345,6 +352,19 @@ export default class Create extends Component {
                     primary
                     onClick={this.handleSubmit}
                     id="createFormSubmit"
+                    disabled={
+                      !this.state.name ||
+                      !this.state.category ||
+                      !this.state.position ||
+                      !this.state.location ||
+                      !this.state.statement ||
+                      !this.state.education ||
+                      !this.state.salary ||
+                      !this.state.info ||
+                      !this.state.experience ||
+                      !this.state.hours.length === 0 ||
+                      !this.state.licensure.length === 0
+                    }
                   >
                     Create Job
                   </Button>
@@ -354,6 +374,6 @@ export default class Create extends Component {
           </Layout.Section>
         </Layout>
       </Page>
-    )
+    );
   }
 }

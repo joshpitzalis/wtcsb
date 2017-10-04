@@ -24,7 +24,11 @@ export default class Dashboard extends Component {
   componentDidMount() {
     database
       .ref(`/jobs`)
-      .on('value', snap => this.setState({ jobs: Object.values(snap.val()) }));
+      .on(
+        'value',
+        snap =>
+          snap.exists() && this.setState({ jobs: Object.values(snap.val()) })
+      );
   }
 
   handleSelect(jobId) {
@@ -53,7 +57,7 @@ export default class Dashboard extends Component {
 
   render() {
     if (this.state.to) {
-      <Redirect to={this.state.to} />;
+      return <Redirect to={this.state.to} />;
     }
     return (
       <Page

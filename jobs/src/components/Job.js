@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { database } from '../firebase'
+import React, { Component } from 'react';
+import { database } from '../firebase';
 import {
   Page,
   Layout,
@@ -9,24 +9,24 @@ import {
   ButtonGroup,
   Button,
   Card
-} from '@shopify/polaris'
-import { Redirect } from 'react-router-dom'
+} from '@shopify/polaris';
+import { Redirect } from 'react-router-dom';
 
 export default class JobPage extends Component {
   state = {
     job: null,
     to: null
-  }
+  };
 
   componentDidMount() {
     database
       .ref(`/jobs/${this.props.match.params.jobId}`)
-      .on('value', snap => this.setState({ job: snap.val() }))
+      .on('value', snap => this.setState({ job: snap.val() }));
   }
 
   render() {
     if (this.state.to) {
-      return <Redirect to={this.state.to} />
+      return <Redirect to={this.state.to} />;
     }
 
     return (
@@ -109,6 +109,17 @@ export default class JobPage extends Component {
               )}
 
               <br />
+              <div>
+                Download, Print, comple and scan the application form before
+                applying.{' '}
+                <a
+                  href="https://firebasestorage.googleapis.com/v0/b/wtcsb-employment-portal.appspot.com/o/WTCSB_Application_Form.docx?alt=media&token=a33e74ab-2ffd-46e7-b235-043219156cd9"
+                  download
+                >
+                  Download the Application Form by clicking here.
+                </a>
+              </div>
+              <br />
 
               <ButtonGroup>
                 <Button onClick={() => this.setState({ to: '/' })}>
@@ -128,6 +139,6 @@ export default class JobPage extends Component {
           </Layout.Section>
         </Layout>
       </Page>
-    )
+    );
   }
 }

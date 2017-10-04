@@ -12,6 +12,7 @@ import {
 import { Redirect } from 'react-router-dom';
 import Dropzone from 'react-dropzone';
 import upload from '../images/upload.png';
+import Recaptcha from 'react-recaptcha';
 
 export default class Application extends Component {
   state = {
@@ -205,12 +206,30 @@ export default class Application extends Component {
                   transferCurrent={this.state.transferCurrent3}
                   transferTotal={this.state.transferTotal3}
                 />
+                <Recaptcha
+                  sitekey="6LcjIjMUAAAAAIdyA4dtfU7rb2hU4-HZIyHZs0u9
+                  "
+                  verifyCallback={() => this.setState({ captcha: true })}
+                />
 
                 <ButtonGroup>
                   <Button onClick={() => this.setState({ to: '/' })}>
                     Cancel
                   </Button>
-                  <Button primary onClick={this.handleSubmit}>
+                  <Button
+                    primary
+                    onClick={this.handleSubmit}
+                    disabled={
+                      !this.state.name ||
+                      !this.state.email ||
+                      !this.state.phone ||
+                      !this.state.address ||
+                      !this.state.coverLetter ||
+                      !this.state.WTCSApplication ||
+                      !this.state.resume ||
+                      !this.state.captcha
+                    }
+                  >
                     Apply To Job
                   </Button>
                 </ButtonGroup>

@@ -17,11 +17,14 @@ class App extends Component {
   }
 
   componentDidMount() {
-    database.ref(`/jobs`).on('value', snap =>
-      this.setState({
-        jobs: Object.values(snap.val()),
-        masterJobs: Object.values(snap.val())
-      })
+    database.ref(`/jobs`).on(
+      'value',
+      snap =>
+        snap.exists() &&
+        this.setState({
+          jobs: Object.values(snap.val()),
+          masterJobs: Object.values(snap.val())
+        })
     );
   }
   handleSelection(selection) {
@@ -33,9 +36,9 @@ class App extends Component {
       );
     } else {
       selected.add(selection);
-      // this.setState({ jobs: [...this.state.masterJobs] }, () =>
-      selected.forEach(filter => this.handleFilter(filter));
-      // );
+      this.setState({ jobs: [...this.state.masterJobs] }, () =>
+        selected.forEach(filter => this.handleFilter(filter))
+      );
     }
     this.setState({ selected });
   }
@@ -59,7 +62,9 @@ class App extends Component {
         job.category !== selection &&
         job.location !== selection &&
         job.education !== selection &&
-        job.experience !== selection
+        job.experience !== selection &&
+        !job.hours.includes(selection) &&
+        !job.licensure.includes(selection)
     );
     this.setState({ jobs });
   }
@@ -73,7 +78,7 @@ class App extends Component {
           <Layout.Section secondary>
             <FormLayout>
               <Card sectioned subdued>
-                <Card.Section title="Filter By Category">
+                <Card.Section title="Filter out Categories">
                   <Checkbox
                     label="Clinical"
                     onChange={() => this.handleSelection('Clinical')}
@@ -112,11 +117,11 @@ class App extends Component {
                   />
                   <Checkbox
                     label="Other"
-                    onChange={() => this.handleSelection('Other')}
+                    onChange={() => this.handleSelection('Other Categories')}
                   />
                 </Card.Section>
 
-                <Card.Section title="Filter By Location" subdued>
+                <Card.Section title="Filter out Locations" subdued>
                   <Checkbox
                     label="Suffolk"
                     onChange={() => this.handleSelection('Suffolk')}
@@ -135,11 +140,11 @@ class App extends Component {
                   />
                   <Checkbox
                     label="Other"
-                    onChange={() => this.handleSelection('Other')}
+                    onChange={() => this.handleSelection('other locations')}
                   />
                 </Card.Section>
 
-                <Card.Section title="Filter By Education" subdued>
+                <Card.Section title="Filter out Education Requirements" subdued>
                   <Checkbox
                     label="Associates"
                     onChange={() => this.handleSelection('Associates')}
@@ -183,22 +188,22 @@ class App extends Component {
                   />
                 </Card.Section>
 
-                <Card.Section title="Filter By Hours" subdued>
+                <Card.Section title="Filter out Timings" subdued>
                   <Checkbox
                     label="Days"
-                    onChange={() => this.handleSelection('Days')}
+                    onChange={() => this.handleSelection('days')}
                   />
                   <Checkbox
                     label="Evenings"
-                    onChange={() => this.handleSelection('Evenings')}
+                    onChange={() => this.handleSelection('evenings')}
                   />
                   <Checkbox
                     label="Rotating"
-                    onChange={() => this.handleSelection('Rotating')}
+                    onChange={() => this.handleSelection('rotating')}
                   />
                 </Card.Section>
 
-                <Card.Section title="Filter By Licensure Status" subdued>
+                <Card.Section title="Filter out Licensure Requirements" subdued>
                   <Checkbox
                     label="QMHP-A"
                     onChange={() => this.handleSelection('QMHP-A')}
@@ -246,7 +251,10 @@ class App extends Component {
                   />
                 </Card.Section>
 
-                <Card.Section title="Filter By Experience" subdued>
+                <Card.Section
+                  title="Filter out Experience Requirements"
+                  subdued
+                >
                   <Checkbox
                     label="None"
                     onChange={() => this.handleSelection('None')}
