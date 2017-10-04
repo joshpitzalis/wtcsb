@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { database, auth } from '../firebase'
+import React, { Component } from 'react';
+import { database, auth } from '../firebase';
 import {
   Page,
   Layout,
@@ -9,8 +9,8 @@ import {
   ButtonGroup,
   Button,
   Select
-} from '@shopify/polaris'
-import { Redirect } from 'react-router-dom'
+} from '@shopify/polaris';
+import { Redirect } from 'react-router-dom';
 
 export default class Create extends Component {
   state = {
@@ -27,7 +27,7 @@ export default class Create extends Component {
     licensure: [],
     status: ['open'],
     to: null
-  }
+  };
 
   //
   // handleInputChange(event) {
@@ -41,76 +41,76 @@ export default class Create extends Component {
   // }
 
   handleCategoryUpdate = e => {
-    let category = this.state.category
-    category = e
-    this.setState({ category })
-  }
+    let category = this.state.category;
+    category = e;
+    this.setState({ category });
+  };
 
   handleLocationUpdate = e => {
-    let location = this.state.location
-    location = e
-    this.setState({ location })
-  }
+    let location = this.state.location;
+    location = e;
+    this.setState({ location });
+  };
 
   handleEducationUpdate = e => {
-    let education = this.state.education
-    education = e
-    this.setState({ education })
-  }
+    let education = this.state.education;
+    education = e;
+    this.setState({ education });
+  };
 
   handleSalaryUpdate = e => {
-    let salary = this.state.salary
-    salary = e
-    this.setState({ salary })
-  }
+    let salary = this.state.salary;
+    salary = e;
+    this.setState({ salary });
+  };
 
   handleExperienceUpdate = e => {
-    let experience = this.state.experience
-    experience = e
-    this.setState({ experience })
-  }
+    let experience = this.state.experience;
+    experience = e;
+    this.setState({ experience });
+  };
 
   handleNameUpdate = e => {
-    let name = this.state.name
-    name = e
-    this.setState({ name })
-  }
+    let name = this.state.name;
+    name = e;
+    this.setState({ name });
+  };
 
   handlePositionUpdate = e => {
-    let position = this.state.position
-    position = e
-    this.setState({ position })
-  }
+    let position = this.state.position;
+    position = e;
+    this.setState({ position });
+  };
 
   handleLicensureUpdate = e => {
-    let licensure = this.state.licensure
-    licensure = e
-    this.setState({ licensure })
-  }
+    let licensure = this.state.licensure;
+    licensure = e;
+    this.setState({ licensure });
+  };
 
   handleStatementUpdate = e => {
-    let statement = this.state.statement
-    statement = e
-    this.setState({ statement })
-  }
+    let statement = this.state.statement;
+    statement = e;
+    this.setState({ statement });
+  };
 
   handleInfoUpdate = e => {
-    let info = this.state.info
-    info = e
-    this.setState({ info })
-  }
+    let info = this.state.info;
+    info = e;
+    this.setState({ info });
+  };
 
   handleHoursUpdate = e => {
-    let hours = this.state.hours
-    hours = e
-    this.setState({ hours })
-  }
+    let hours = this.state.hours;
+    hours = e;
+    this.setState({ hours });
+  };
 
   handleSubmit = () => {
-    const newJobPostKey = database.ref(`/jobs`).push().key
-    console.log(newJobPostKey)
+    const newJobRef = database.collection(`jobs`).doc();
+    // console.log(newJobPostKey);
     var jobData = {
-      id: newJobPostKey,
+      id: newJobRef,
       name: this.state.name || null,
       category: this.state.category || null,
       position: this.state.position || null,
@@ -124,21 +124,20 @@ export default class Create extends Component {
       hours: this.state.hours || null,
       status: this.state.status || null,
       to: this.state.to
-    }
+    };
 
-    var updates = {}
-    updates[`/jobs/${newJobPostKey}`] = jobData
+    // var updates = {};
+    // updates[`/jobs/${newJobPostKey}`] = jobData;
 
-    return database
-      .ref()
-      .update(updates)
+    return newJobRef
+      .set(jobData)
       .then(this.setState({ to: '/dashboard' }))
-      .catch(error => console.log(error.message))
-  }
+      .catch(error => console.log(error.message));
+  };
 
   render() {
     if (this.state.to) {
-      return <Redirect to={this.state.to} />
+      return <Redirect to={this.state.to} />;
     }
 
     return (
@@ -354,6 +353,6 @@ export default class Create extends Component {
           </Layout.Section>
         </Layout>
       </Page>
-    )
+    );
   }
 }

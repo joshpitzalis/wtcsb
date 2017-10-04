@@ -23,8 +23,16 @@ export default class Dashboard extends Component {
   }
   componentDidMount() {
     database
-      .ref(`/jobs`)
-      .on('value', snap => this.setState({ jobs: Object.values(snap.val()) }));
+      .collection(`jobs`)
+      .get()
+      .then(snap => {
+        let jobs = [];
+        snap.forEach(doc => jobs.push(doc.data()));
+        this.setState({ jobs });
+      })
+      .catch(function(error) {
+        console.log('Error getting documents: ', error);
+      });
   }
 
   handleSelect(jobId) {
@@ -53,7 +61,7 @@ export default class Dashboard extends Component {
 
   render() {
     if (this.state.to) {
-      <Redirect to={this.state.to} />;
+      return <Redirect to={this.state.to} />;
     }
     return (
       <Page
@@ -61,6 +69,7 @@ export default class Dashboard extends Component {
         title="WTCSB Employment Portal"
         primaryAction={{ content: 'Logout', onAction: () => auth.signOut() }}
         secondaryActions={[
+          // { content: 'New', onAction: () => console.log('dog') },
           { content: 'New', onAction: () => this.setState({ to: '/create' }) },
           { content: 'Close', onAction: () => this.handleClosing() },
           { content: 'Delete', onAction: () => this.handleDelete() }

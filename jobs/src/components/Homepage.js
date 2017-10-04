@@ -17,27 +17,42 @@ class App extends Component {
   }
 
   componentDidMount() {
-    database.ref(`/jobs`).on('value', snap =>
-      this.setState({
-        jobs: Object.values(snap.val()),
-        masterJobs: Object.values(snap.val())
+    // database.ref(`/jobs`).on('value', snap =>
+    //   this.setState({
+    //     jobs: Object.values(snap.val()),
+    //     masterJobs: Object.values(snap.val())
+    //   })
+    // );
+
+    database
+      .collection(`jobs`)
+      .where('category', '==', 'Emergency')
+      .get()
+      .then(snap => {
+        let jobs = [];
+        snap.forEach(doc => jobs.push(doc.data()));
+        this.setState({ jobs });
       })
-    );
+      .catch(function(error) {
+        console.log('Error getting documents: ', error);
+      });
   }
   handleSelection(selection) {
     const selected = new Set([...this.state.selected]);
     if (selected.has(selection)) {
       selected.delete(selection);
-      this.setState({ jobs: [...this.state.masterJobs] }, () =>
-        selected.forEach(filter => this.handleFilter(filter))
-      );
+      // this.setState({ jobs: [...this.state.masterJobs] }, () =>
+      //   selected.forEach(filter => this.handleFilter(filter))
+      // );
     } else {
       selected.add(selection);
       // this.setState({ jobs: [...this.state.masterJobs] }, () =>
-      selected.forEach(filter => this.handleFilter(filter));
+      // selected.forEach(filter => this.handleFilter(filter));
+
       // );
     }
     this.setState({ selected });
+    console.log(selected);
   }
 
   handleFilter(selection) {
