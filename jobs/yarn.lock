@@ -5728,6 +5728,12 @@ react-addons-transition-group@^15.4.2:
   dependencies:
     react-transition-group "^1.2.0"
 
+react-checkbox-group@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/react-checkbox-group/-/react-checkbox-group-3.3.1.tgz#75f6e3358191351c58490c40a43c8149fda4d3ed"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-dev-utils@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-4.0.1.tgz#106ae3d29f811c169d459bb9215a5933b7e11fb6"
