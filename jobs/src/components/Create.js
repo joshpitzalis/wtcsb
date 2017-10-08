@@ -316,6 +316,10 @@ export default class Create extends Component {
                     {
                       label: 'RN',
                       value: 'RN'
+                    },
+                    {
+                      label: 'None',
+                      value: 'None'
                     }
                   ]}
                   selected={this.state.licensure}

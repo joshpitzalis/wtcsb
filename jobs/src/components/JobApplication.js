@@ -31,6 +31,12 @@ export default class Application extends Component {
     WTCSApplication: undefined
   };
 
+  componentDidMount() {
+    database
+      .ref(`/jobs/${this.props.match.params.jobId}`)
+      .on('value', snap => this.setState({ job: snap.val() }));
+  }
+
   onDropCoverLetter = files => {
     const file = files[0];
     const uploadTask = storage
@@ -145,99 +151,105 @@ export default class Application extends Component {
     }
 
     return (
-      <Page
-        fullWidth
-        title={`Job Application Form`}
-        separator
-        secondaryActions={[
-          {
-            content: 'Back to Homepage',
-            onAction: () => this.setState({ to: '/' })
-          }
-        ]}
-      >
-        <Layout>
-          <Layout.Section secondary>
-            <div className="measure-wide pa4 pl0-l pl0-m">
-              <FormLayout>
-                <TextField
-                  id="jobApplicationName"
-                  label="Your Name"
-                  value={this.state.name}
-                  onChange={this.handleNameUpdate}
-                />
-                <TextField
-                  id="jobApplicationEmail"
-                  label="Email"
-                  type="email"
-                  value={this.state.email}
-                  onChange={this.handleEmailUpdate}
-                />
-                <TextField
-                  id="jobApplicationPhone"
-                  label="Phone Number"
-                  type="tel"
-                  value={this.state.phone}
-                  onChange={this.handlePhoneUpdate}
-                />
-                <TextField
-                  id="jobApplicationAddress"
-                  label="Address"
-                  multiline={3}
-                  value={this.state.address}
-                  onChange={this.handleAddressUpdate}
-                />
+      <article>
+        <div className="h-100 bg-blue w-100 ">
+          <h1 className="f-headline white b pl5 pt5 lh-copy">
+            Job Application Form
+          </h1>
+        </div>
+        <Page
+          fullWidth
+          title={this.state.job && this.state.job.name}
+          separator
+          secondaryActions={[
+            {
+              content: 'Back to Homepage',
+              onAction: () => this.setState({ to: '/' })
+            }
+          ]}
+        >
+          <Layout>
+            <Layout.Section secondary>
+              <div className="measure-wide pa4 pl0-l pl0-m">
+                <FormLayout>
+                  <TextField
+                    id="jobApplicationName"
+                    label="Your Name"
+                    value={this.state.name}
+                    onChange={this.handleNameUpdate}
+                  />
+                  <TextField
+                    id="jobApplicationEmail"
+                    label="Email"
+                    type="email"
+                    value={this.state.email}
+                    onChange={this.handleEmailUpdate}
+                  />
+                  <TextField
+                    id="jobApplicationPhone"
+                    label="Phone Number"
+                    type="tel"
+                    value={this.state.phone}
+                    onChange={this.handlePhoneUpdate}
+                  />
+                  <TextField
+                    id="jobApplicationAddress"
+                    label="Address"
+                    multiline={3}
+                    value={this.state.address}
+                    onChange={this.handleAddressUpdate}
+                  />
 
-                <CoverLetter
-                  onDrop={this.onDropCoverLetter}
-                  coverLetter={this.state.coverLetter}
-                  transferCurrent={this.state.transferCurrent1}
-                  transferTotal={this.state.transferTotal1}
-                />
-                <WTCSApplication
-                  onDrop={this.onDropWTCSApplication}
-                  WTCSApplication={this.state.WTCSApplication}
-                  transferCurrent={this.state.transferCurrent2}
-                  transferTotal={this.state.transferTotal2}
-                />
-                <Resume
-                  onDrop={this.onDropResume}
-                  resume={this.state.resume}
-                  transferCurrent={this.state.transferCurrent3}
-                  transferTotal={this.state.transferTotal3}
-                />
-                <Recaptcha
-                  sitekey="6LcjIjMUAAAAAIdyA4dtfU7rb2hU4-HZIyHZs0u9
-                  "
-                  verifyCallback={() => this.setState({ captcha: true })}
-                />
+                  <CoverLetter
+                    onDrop={this.onDropCoverLetter}
+                    coverLetter={this.state.coverLetter}
+                    transferCurrent={this.state.transferCurrent1}
+                    transferTotal={this.state.transferTotal1}
+                  />
+                  <WTCSApplication
+                    onDrop={this.onDropWTCSApplication}
+                    WTCSApplication={this.state.WTCSApplication}
+                    transferCurrent={this.state.transferCurrent2}
+                    transferTotal={this.state.transferTotal2}
+                  />
+                  <Resume
+                    onDrop={this.onDropResume}
+                    resume={this.state.resume}
+                    transferCurrent={this.state.transferCurrent3}
+                    transferTotal={this.state.transferTotal3}
+                  />
+                  <Recaptcha
+                    sitekey="6LdcgjMUAAAAAGFYGFNcufCm645bsNXEuZ6bmE1w"
+                    verifyCallback={() => this.setState({ captcha: true })}
+                  />
 
-                <ButtonGroup>
-                  <Button onClick={() => this.setState({ to: '/' })}>
-                    Cancel
-                  </Button>
-                  <Button
-                    primary
-                    onClick={this.handleSubmit}
-                    disabled={
-                      !this.state.name ||
-                      !this.state.email ||
-                      !this.state.phone ||
-                      !this.state.address ||
-                      !this.state.coverLetter ||
-                      !this.state.WTCSApplication ||
-                      !this.state.resume ||
-                      !this.state.captcha
-                    }
-                  >
-                    Apply To Job
-                  </Button>
-                </ButtonGroup>
-              </FormLayout>
-            </div>
-          </Layout.Section>
-        </Layout>
-      </Page>
+                  <ButtonGroup>
+                    <Button onClick={() => this.setState({ to: '/' })}>
+                      Cancel
+                    </Button>
+                    <Button
+                      primary
+                      onClick={this.handleSubmit}
+                      disabled={
+                        !this.state.name ||
+                        !this.state.email ||
+                        !this.state.phone ||
+                        !this.state.address ||
+                        !this.state.coverLetter ||
+                        !this.state.WTCSApplication ||
+                        !this.state.resume ||
+                        !this.state.captcha
+                      }
+                    >
+                      Apply To Job
+                    </Button>
+                  </ButtonGroup>
+                </FormLayout>
+              </div>
+            </Layout.Section>
+          </Layout>
+        </Page>
+      </article>
     );
   }
 }
