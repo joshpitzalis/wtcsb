@@ -103,7 +103,7 @@ export default class Create extends Component {
   handleHoursUpdate = e => {
     let hours = []
     hours = e
-    this.setState({ hours })
+    this.setState({ hours: ['TBD'] })
   }
 
   handleSubmit = () => {

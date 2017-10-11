@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { database, storage } from '../firebase';
+import React, { Component } from 'react'
+import { database, storage } from '../firebase'
 import {
   Page,
   Layout,
@@ -8,11 +8,11 @@ import {
   ChoiceList,
   ButtonGroup,
   Button
-} from '@shopify/polaris';
-import { Redirect } from 'react-router-dom';
-import Dropzone from 'react-dropzone';
-import upload from '../images/upload.png';
-import Recaptcha from 'react-recaptcha';
+} from '@shopify/polaris'
+import { Redirect } from 'react-router-dom'
+import Dropzone from 'react-dropzone'
+import upload from '../images/upload.png'
+import Recaptcha from 'react-recaptcha'
 
 export default class Application extends Component {
   state = {
@@ -29,103 +29,103 @@ export default class Application extends Component {
     coverLetter: undefined,
     resume: undefined,
     WTCSApplication: undefined
-  };
+  }
 
-  componentDidMount() {
+  componentDidMount () {
     database
       .ref(`/jobs/${this.props.match.params.jobId}`)
-      .on('value', snap => this.setState({ job: snap.val() }));
+      .on('value', snap => this.setState({ job: snap.val() }))
   }
 
   onDropCoverLetter = files => {
-    const file = files[0];
+    const file = files[0]
     const uploadTask = storage
       .ref(this.props.match.params.jobId)
       .child(file.name)
-      .put(file, { contentType: file.type });
+      .put(file, { contentType: file.type })
     uploadTask.on('state_changed', snapshot => {
       this.setState({
         transferCurrent: snapshot.bytesTransferred,
         transferTotal: snapshot.totalBytes
-      });
-    });
+      })
+    })
     uploadTask
       .then(snapshot =>
         this.setState({
           coverLetter: snapshot.downloadURL
         })
       )
-      .catch(error => console.error(error));
-  };
+      .catch(error => console.error(error))
+  }
 
   onDropWTCSApplication = files => {
-    const file = files[0];
+    const file = files[0]
     const uploadTask = storage
       .ref(this.props.match.params.jobId)
       .child(file.name)
-      .put(file, { contentType: file.type });
+      .put(file, { contentType: file.type })
     uploadTask.on('state_changed', snapshot => {
       this.setState({
         transferCurrent: snapshot.bytesTransferred,
         transferTotal: snapshot.totalBytes
-      });
-    });
+      })
+    })
     uploadTask
       .then(snapshot =>
         this.setState({
           WTCSApplication: snapshot.downloadURL
         })
       )
-      .catch(error => console.error(error));
-  };
+      .catch(error => console.error(error))
+  }
 
   onDropResume = files => {
-    const file = files[0];
+    const file = files[0]
     const uploadTask = storage
       .ref(this.props.match.params.jobId)
       .child(file.name)
-      .put(file, { contentType: file.type });
+      .put(file, { contentType: file.type })
     uploadTask.on('state_changed', snapshot => {
       this.setState({
         transferCurrent: snapshot.bytesTransferred,
         transferTotal: snapshot.totalBytes
-      });
-    });
+      })
+    })
     uploadTask
       .then(snapshot =>
         this.setState({
           resume: snapshot.downloadURL
         })
       )
-      .catch(error => console.error(error));
-  };
+      .catch(error => console.error(error))
+  }
 
   handleNameUpdate = e => {
-    let name = this.state.name;
-    name = e;
-    this.setState({ name });
-  };
+    let name = this.state.name
+    name = e
+    this.setState({ name })
+  }
 
   handleEmailUpdate = e => {
-    let email = this.state.email;
-    email = e;
-    this.setState({ email });
-  };
+    let email = this.state.email
+    email = e
+    this.setState({ email })
+  }
   handlePhoneUpdate = e => {
-    let phone = this.state.phone;
-    phone = e;
-    this.setState({ phone });
-  };
+    let phone = this.state.phone
+    phone = e
+    this.setState({ phone })
+  }
   handleAddressUpdate = e => {
-    let address = this.state.address;
-    address = e;
-    this.setState({ address });
-  };
+    let address = this.state.address
+    address = e
+    this.setState({ address })
+  }
 
   handleSubmit = () => {
     const newJobPostKey = database
       .ref(`/jobs/${this.props.match.params.jobId}/applicants`)
-      .push().key;
+      .push().key
     var jobData = {
       id: newJobPostKey,
       name: this.state.name || null,
@@ -135,25 +135,25 @@ export default class Application extends Component {
       coverLetter: this.state.coverLetter || null,
       WTCSApplication: this.state.WTCSApplication || null,
       resume: this.state.resume || null
-    };
+    }
 
-    const updates = {};
-    updates[newJobPostKey] = jobData;
+    const updates = {}
+    updates[newJobPostKey] = jobData
     return database
       .ref(`/jobs/${this.props.match.params.jobId}/applicants`)
       .update(updates)
-      .then(this.setState({ to: '/' }));
-  };
+      .then(this.setState({ to: '/' }))
+  }
 
-  render() {
+  render () {
     if (this.state.to) {
-      return <Redirect to={this.state.to} />;
+      return <Redirect to={this.state.to} />
     }
 
     return (
       <article>
-        <div className="h-100 bg-blue w-100 ">
-          <h1 className="f-headline white b pl5 pt5 lh-copy">
+        <div className='h-100 bg-blue w-100 '>
+          <h1 className='f-headline white b pl5 pt5 lh-copy'>
             Job Application Form
           </h1>
         </div>
@@ -170,31 +170,31 @@ export default class Application extends Component {
         >
           <Layout>
             <Layout.Section secondary>
-              <div className="measure-wide pa4 pl0-l pl0-m">
+              <div className='measure-wide pa4 pl0-l pl0-m'>
                 <FormLayout>
                   <TextField
-                    id="jobApplicationName"
-                    label="Your Name"
+                    id='jobApplicationName'
+                    label='Your Name'
                     value={this.state.name}
                     onChange={this.handleNameUpdate}
                   />
                   <TextField
-                    id="jobApplicationEmail"
-                    label="Email"
-                    type="email"
+                    id='jobApplicationEmail'
+                    label='Email'
+                    type='email'
                     value={this.state.email}
                     onChange={this.handleEmailUpdate}
                   />
                   <TextField
-                    id="jobApplicationPhone"
-                    label="Phone Number"
-                    type="tel"
+                    id='jobApplicationPhone'
+                    label='Phone Number'
+                    type='tel'
                     value={this.state.phone}
                     onChange={this.handlePhoneUpdate}
                   />
                   <TextField
-                    id="jobApplicationAddress"
-                    label="Address"
+                    id='jobApplicationAddress'
+                    label='Address'
                     multiline={3}
                     value={this.state.address}
                     onChange={this.handleAddressUpdate}
@@ -219,7 +219,7 @@ export default class Application extends Component {
                     transferTotal={this.state.transferTotal3}
                   />
                   <Recaptcha
-                    sitekey="6LdcgjMUAAAAAGFYGFNcufCm645bsNXEuZ6bmE1w"
+                    sitekey='6LdcgjMUAAAAAGFYGFNcufCm645bsNXEuZ6bmE1w'
                     verifyCallback={() => this.setState({ captcha: true })}
                   />
 
@@ -227,22 +227,39 @@ export default class Application extends Component {
                     <Button onClick={() => this.setState({ to: '/' })}>
                       Cancel
                     </Button>
-                    <Button
-                      primary
-                      onClick={this.handleSubmit}
-                      disabled={
-                        !this.state.name ||
-                        !this.state.email ||
-                        !this.state.phone ||
-                        !this.state.address ||
-                        !this.state.coverLetter ||
-                        !this.state.WTCSApplication ||
-                        !this.state.resume ||
-                        !this.state.captcha
-                      }
-                    >
-                      Apply To Job
-                    </Button>
+                    {process.env.NODE_ENV === 'production'
+                      ? <Button
+                        primary
+                        onClick={this.handleSubmit}
+                        disabled={
+                            !this.state.name ||
+                              !this.state.email ||
+                              !this.state.phone ||
+                              !this.state.address ||
+                              !this.state.coverLetter ||
+                              !this.state.WTCSApplication ||
+                              !this.state.resume ||
+                              !this.state.captcha
+                          }
+                        >
+                          Apply To Job
+                        </Button>
+                      : <Button
+                        primary
+                        onClick={this.handleSubmit}
+                        disabled={
+                            !this.state.name ||
+                              !this.state.email ||
+                              !this.state.phone ||
+                              !this.state.address ||
+                              !this.state.coverLetter ||
+                              !this.state.WTCSApplication ||
+                              !this.state.resume
+                          }
+                        >
+                          Apply To Job
+                        </Button>}
+
                   </ButtonGroup>
                 </FormLayout>
               </div>
@@ -250,7 +267,7 @@ export default class Application extends Component {
           </Layout>
         </Page>
       </article>
-    );
+    )
   }
 }
 
@@ -261,29 +278,26 @@ const CoverLetter = ({
   transferTotal
 }) => (
   <Dropzone
-    className="ba w5 br3 pa3 flex col mxc cxc h-100 pointer dim w-100 dim-hover"
+    className='ba w5 br3 pa3 flex col mxc cxc h-100 pointer dim w-100 dim-hover'
     style={{ borderColor: '#c4cdd5' }}
     onDrop={onDrop}
   >
-    {coverLetter ? (
-      <p>Cover letter uploaded. Click here to upload a new one.</p>
-    ) : (
-      <div className="tc">
+    {coverLetter
+      ? <p>Cover letter uploaded. Click here to upload a new one.</p>
+      : <div className='tc'>
         <img
           src={upload}
-          alt="Drag COVER LETTER here to upload."
-          className="respond"
-        />
-        <p className="tc pt3">Drag COVER LETTER here to upload.</p>
-      </div>
-    )}
+          alt='Drag COVER LETTER here to upload.'
+          className='respond'
+          />
+        <p className='tc pt3'>Drag COVER LETTER here to upload.</p>
+      </div>}
 
     {transferCurrent !== 0 &&
-      transferCurrent !== transferTotal && (
-        <progress value={transferCurrent} max={transferTotal} />
-      )}
+      transferCurrent !== transferTotal &&
+      <progress value={transferCurrent} max={transferTotal} />}
   </Dropzone>
-);
+)
 
 const WTCSApplication = ({
   onDrop,
@@ -292,52 +306,46 @@ const WTCSApplication = ({
   transferTotal
 }) => (
   <Dropzone
-    className="ba w5 br3 pa3 flex col mxc cxc h-100 pointer dim w-100 dim-hover"
+    className='ba w5 br3 pa3 flex col mxc cxc h-100 pointer dim w-100 dim-hover'
     style={{ borderColor: '#c4cdd5' }}
     onDrop={onDrop}
   >
-    {WTCSApplication ? (
-      <p>WTCS Application uploaded. Click here to upload a new one.</p>
-    ) : (
-      <div className="tc">
+    {WTCSApplication
+      ? <p>WTCS Application uploaded. Click here to upload a new one.</p>
+      : <div className='tc'>
         <img
           src={upload}
-          alt="Drag WTCS Application here to upload."
-          className="respond"
-        />
-        <p className="tc pt3">Drag WTCS Application here to upload.</p>
-      </div>
-    )}
+          alt='Drag WTCS Application here to upload.'
+          className='respond'
+          />
+        <p className='tc pt3'>Drag WTCS Application here to upload.</p>
+      </div>}
 
     {transferCurrent !== 0 &&
-      transferCurrent !== transferTotal && (
-        <progress value={transferCurrent} max={transferTotal} />
-      )}
+      transferCurrent !== transferTotal &&
+      <progress value={transferCurrent} max={transferTotal} />}
   </Dropzone>
-);
+)
 
 const Resume = ({ onDrop, resume, transferCurrent, transferTotal }) => (
   <Dropzone
-    className="ba w5 br3 pa3 flex col mxc cxc h-100 pointer dim w-100 dim-hover"
+    className='ba w5 br3 pa3 flex col mxc cxc h-100 pointer dim w-100 dim-hover'
     style={{ borderColor: '#c4cdd5' }}
     onDrop={onDrop}
   >
-    {resume ? (
-      <p>Resume uploaded. Click here to upload a new one.</p>
-    ) : (
-      <div className="tc">
+    {resume
+      ? <p>Resume uploaded. Click here to upload a new one.</p>
+      : <div className='tc'>
         <img
           src={upload}
-          alt="Drag your resume here to upload."
-          className="respond"
-        />
-        <p className="tc pt3">Drag your resume here to upload.</p>
-      </div>
-    )}
+          alt='Drag your resume here to upload.'
+          className='respond'
+          />
+        <p className='tc pt3'>Drag your resume here to upload.</p>
+      </div>}
 
     {transferCurrent !== 0 &&
-      transferCurrent !== transferTotal && (
-        <progress value={transferCurrent} max={transferTotal} />
-      )}
+      transferCurrent !== transferTotal &&
+      <progress value={transferCurrent} max={transferTotal} />}
   </Dropzone>
-);
+)
