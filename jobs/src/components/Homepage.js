@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { database } from '../firebase';
-import { Redirect, Link } from 'react-router-dom';
-import { Page, Layout, Card, FormLayout, Checkbox } from '@shopify/polaris';
-import { Checkbox as Checkbx, CheckboxGroup } from 'react-checkbox-group';
+import React, { Component } from 'react'
+import { database } from '../firebase'
+import { Redirect, Link } from 'react-router-dom'
+import { Page, Layout, Card, FormLayout, Checkbox } from '@shopify/polaris'
+import { Checkbox as Checkbx, CheckboxGroup } from 'react-checkbox-group'
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       jobs: null,
       masterJobs: null,
@@ -18,135 +18,159 @@ class App extends Component {
       timings: [],
       licensure: [],
       experience: []
-    };
-    this.handleFilter = this.handleFilter.bind(this);
-    this.handleSelection = this.handleSelection.bind(this);
+    }
+    // this.handleFilter = this.handleFilter.bind(this);
+    // this.handleSelection = this.handleSelection.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount () {
     database.ref(`/jobs`).on('value', snap => {
       snap.exists() &&
         this.setState({
           jobs: Object.values(snap.val()),
           masterJobs: Object.values(snap.val())
-        });
-    });
+        })
+    })
   }
-  handleSelection(selection) {
-    const selected = new Set([...this.state.selected]);
-    if (selected.has(selection)) {
-      selected.delete(selection);
-      this.setState({ jobs: [...this.state.masterJobs] }, () =>
-        selected.forEach(filter => this.handleFilter(filter))
-      );
-    } else {
-      selected.add(selection);
-      this.setState({ jobs: [...this.state.masterJobs] }, () =>
-        selected.forEach(filter => this.handleFilter(filter))
-      );
-    }
-    this.setState({ selected });
+  // handleSelection(selection) {
+  //   const selected = new Set([...this.state.selected]);
+  //   if (selected.has(selection)) {
+  //     selected.delete(selection);
+  //     this.setState({ jobs: [...this.state.masterJobs] }, () =>
+  //       selected.forEach(filter => this.handleFilter(filter))
+  //     );
+  //   } else {
+  //     selected.add(selection);
+  //     this.setState({ jobs: [...this.state.masterJobs] }, () =>
+  //       selected.forEach(filter => this.handleFilter(filter))
+  //     );
+  //   }
+  //   this.setState({ selected });
+  // }
+
+  // handleFilter(selection) {
+  //   const joby = [...this.state.jobs];
+
+  //   const jobs = joby.filter(
+  //     job =>
+  //       job.category === selection ||
+  //       job.location === selection ||
+  //       job.education === selection ||
+  //       job.experience === selection ||
+  //       job.hours.includes(selection) ||
+  //       job.licensure.includes(selection)
+  //   );
+
+  //   this.setState({ jobs });
+  // }
+
+  siftCategories (selection) {
+    const joby = [...this.state.jobs]
+
+    const jobs = []
+
+    this.state.categories.forEach(filter => {
+      const results = joby.filter(job => job.category === filter)
+      jobs.push(...results)
+    })
+
+    this.setState({ jobs })
   }
 
-  handleFilter(selection) {
-    const joby = [...this.state.jobs];
+  siftLocations (selection) {
+    const joby = [...this.state.jobs]
 
-    const jobs = joby.filter(
-      job =>
-        job.category === selection ||
-        job.location === selection ||
-        job.education === selection ||
-        job.experience === selection ||
-        job.hours.includes(selection) ||
-        job.licensure.includes(selection)
-    );
-
-    this.setState({ jobs });
-  }
-
-  siftCategories(selection) {
-    const joby = [...this.state.jobs];
-
-    const jobs = joby.filter(job => job.category === selection);
-
-    this.setState({ jobs });
-  }
-
-  siftLocations(selection) {
-    const joby = [...this.state.jobs];
-
-    const jobs = [];
+    const jobs = []
 
     this.state.locations.forEach(filter => {
-      const results = joby.filter(job => job.location === filter);
-      jobs.push(...results);
-    });
+      const results = joby.filter(job => job.location === filter)
+      jobs.push(...results)
+    })
 
-    this.setState({ jobs });
+    this.setState({ jobs })
   }
 
-  siftEducation(selection) {
-    const joby = [...this.state.jobs];
+  siftEducation (selection) {
+    const joby = [...this.state.jobs]
 
-    const jobs = [];
+    const jobs = []
 
     this.state.education.forEach(filter => {
-      const results = joby.filter(job => job.education === filter);
-      jobs.push(...results);
-    });
+      const results = joby.filter(job => job.education === filter)
+      jobs.push(...results)
+    })
 
-    this.setState({ jobs });
+    this.setState({ jobs })
   }
 
-  siftTimings(selection) {
-    const joby = [...this.state.jobs];
+  siftTimings (selection) {
+    const joby = [...this.state.jobs]
 
-    const jobs = [];
+    const jobs = []
 
     this.state.timings.forEach(filter => {
-      const results = joby.filter(job => job.hours.includes(filter));
-      jobs.push(...results);
-    });
+      const results = joby.filter(job => job.hours.includes(filter))
+      jobs.push(...results)
+    })
 
-    this.setState({ jobs });
+    this.setState({ jobs })
   }
 
-  siftLicensure(selection) {
-    const joby = [...this.state.jobs];
+  siftLicensure (selection) {
+    const joby = [...this.state.jobs]
 
-    const jobs = [];
+    const jobs = []
 
     this.state.licensure.forEach(filter => {
-      const results = joby.filter(job => job.licensure.includes(filter));
-      jobs.push(...results);
-    });
+      const results = joby.filter(job => job.licensure.includes(filter))
+      jobs.push(...results)
+    })
 
-    this.setState({ jobs });
+    this.setState({ jobs })
   }
 
-  siftExperience(selection) {
-    const joby = [...this.state.jobs];
+  siftExperience (selection) {
+    const joby = [...this.state.jobs]
 
-    const jobs = [];
+    const jobs = []
 
     this.state.experience.forEach(filter => {
-      const results = joby.filter(job => job.experience === filter);
-      jobs.push(...results);
-    });
+      const results = joby.filter(job => job.experience === filter)
+      jobs.push(...results)
+    })
 
-    this.setState({ jobs });
+    this.setState({ jobs })
   }
 
   runFilters = () => {
-    this.setState({ jobs: [...this.state.masterJobs] }, () => {
-      this.state.categories.forEach(filter => this.siftCategories(filter));
-      this.state.locations.forEach(filter => this.siftLocations(filter));
-      this.state.education.forEach(filter => this.siftEducation(filter));
-      this.state.timings.forEach(filter => this.siftTimings(filter));
-      this.state.licensure.forEach(filter => this.siftLicensure(filter));
-      this.state.experience.forEach(filter => this.siftExperience(filter));
-    });
-  };
+    this.setState({ jobs: [...this.state.masterJobs] }, async () => {
+      await this.state.categories.forEach(filter => this.siftCategories(filter))
+      await this.state.locations.forEach(filter => this.siftLocations(filter))
+      await this.state.education.forEach(filter => this.siftEducation(filter))
+      await this.state.timings.forEach(filter => this.siftTimings(filter))
+      await this.state.licensure.forEach(filter => this.siftLicensure(filter))
+      await this.state.experience.forEach(filter => this.siftExperience(filter))
+
+      // if (this.state.categories) {
+      //   this.state.categories.forEach(filter => this.siftCategories(filter))
+      // }
+      // if (this.state.locations) {
+      //   this.state.locations.forEach(filter => this.siftLocations(filter))
+      // }
+      // if (this.state.education) {
+      //   this.state.education.forEach(filter => this.siftEducation(filter))
+      // }
+      // if (this.state.timings) {
+      //   this.state.timings.forEach(filter => this.siftTimings(filter))
+      // }
+      // if (this.state.licensure) {
+      //   this.state.licensure.forEach(filter => this.siftLicensure(filter))
+      // }
+      // if (this.state.experience) {
+      //   this.state.experience.forEach(filter => this.siftExperience(filter))
+      // }
+    })
+  }
 
   categoriesChanged = newCategories => {
     this.setState(
@@ -154,8 +178,8 @@ class App extends Component {
         categories: newCategories
       },
       () => this.runFilters()
-    );
-  };
+    )
+  }
 
   locationsChanged = newLocations => {
     this.setState(
@@ -163,8 +187,8 @@ class App extends Component {
         locations: newLocations
       },
       () => this.runFilters()
-    );
-  };
+    )
+  }
 
   educationChanged = newQualifications => {
     this.setState(
@@ -172,8 +196,8 @@ class App extends Component {
         education: newQualifications
       },
       () => this.runFilters()
-    );
-  };
+    )
+  }
 
   timingsChanged = newTimings => {
     this.setState(
@@ -181,8 +205,8 @@ class App extends Component {
         timings: newTimings
       },
       () => this.runFilters()
-    );
-  };
+    )
+  }
 
   licensureChanged = newLicensure => {
     this.setState(
@@ -190,8 +214,8 @@ class App extends Component {
         licensure: newLicensure
       },
       () => this.runFilters()
-    );
-  };
+    )
+  }
 
   experienceChanged = newExperience => {
     this.setState(
@@ -199,17 +223,17 @@ class App extends Component {
         experience: newExperience
       },
       () => this.runFilters()
-    );
-  };
+    )
+  }
 
-  render() {
+  render () {
     if (this.state.to) {
-      return <Redirect to={this.state.to} />;
+      return <Redirect to={this.state.to} />
     }
     return (
       <article>
-        <div className="h-100 bg-blue w-100 ">
-          <h1 className="f-headline white b pl5 pt6 lh-copy">
+        <div className='h-100 bg-blue w-100 '>
+          <h1 className='f-headline white b pl5 pt6 lh-copy'>
             WTCSB Job Opportinites
           </h1>
         </div>
@@ -219,44 +243,44 @@ class App extends Component {
             <Layout.Section secondary>
               <FormLayout>
                 <Card sectioned subdued>
-                  <Card.Section title="Filter by Categories">
+                  <Card.Section title='Filter by Categories'>
                     <CheckboxGroup
-                      name="categories"
+                      name='categories'
                       value={this.state.categories}
                       onChange={this.state.masterJobs && this.categoriesChanged}
-                      className="flex col lh-copy"
+                      className='flex col lh-copy'
                     >
                       <label>
-                        <Checkbx value="Clinical" /> Clinical
+                        <Checkbx value='Clinical' /> Clinical
                       </label>
                       <label>
-                        <Checkbx value="Case Management" /> Case Management
+                        <Checkbx value='Case Management' /> Case Management
                       </label>
                       <label>
-                        <Checkbx value="Child & Family" /> Child & Family
+                        <Checkbx value='Child & Family' /> Child & Family
                       </label>
                       <label>
-                        <Checkbx value="Emergency" /> Emergency
+                        <Checkbx value='Emergency' /> Emergency
                       </label>
                       <label>
-                        <Checkbx value="Rehabilitation" /> Rehabilitation
+                        <Checkbx value='Rehabilitation' /> Rehabilitation
                       </label>
                       <label>
-                        <Checkbx value="Residential" /> Residential
-                      </label>
-
-                      <label>
-                        <Checkbx value="Administrative" /> Administrative
-                      </label>
-                      <label>
-                        <Checkbx value="Medical" /> Medical
-                      </label>
-                      <label>
-                        <Checkbx value="Psychiatrist" /> Psychiatrist
+                        <Checkbx value='Residential' /> Residential
                       </label>
 
                       <label>
-                        <Checkbx value="Other Categories" /> Other
+                        <Checkbx value='Administrative' /> Administrative
+                      </label>
+                      <label>
+                        <Checkbx value='Medical' /> Medical
+                      </label>
+                      <label>
+                        <Checkbx value='Psychiatrist' /> Psychiatrist
+                      </label>
+
+                      <label>
+                        <Checkbx value='Other Categories' /> Other
                       </label>
                     </CheckboxGroup>
                     {/* <Checkbox
@@ -301,27 +325,27 @@ class App extends Component {
                     /> */}
                   </Card.Section>
 
-                  <Card.Section title="Filter by Locations" subdued>
+                  <Card.Section title='Filter by Locations' subdued>
                     <CheckboxGroup
-                      name="categories"
+                      name='categories'
                       value={this.state.locations}
                       onChange={this.state.masterJobs && this.locationsChanged}
-                      className="flex col lh-copy"
+                      className='flex col lh-copy'
                     >
                       <label>
-                        <Checkbx value="Suffolk" /> Suffolk
+                        <Checkbx value='Suffolk' /> Suffolk
                       </label>
                       <label>
-                        <Checkbx value="Isle of Wight" /> Isle of Wight
+                        <Checkbx value='Isle of Wight' /> Isle of Wight
                       </label>
                       <label>
-                        <Checkbx value="Southampton" /> Southampton
+                        <Checkbx value='Southampton' /> Southampton
                       </label>
                       <label>
-                        <Checkbx value="Franklin" /> Franklin
+                        <Checkbx value='Franklin' /> Franklin
                       </label>
                       <label>
-                        <Checkbx value="other locations" /> Other
+                        <Checkbx value='other locations' /> Other
                       </label>
                     </CheckboxGroup>
 
@@ -349,47 +373,47 @@ class App extends Component {
                   </Card.Section>
 
                   <Card.Section
-                    title="Filter by Education Requirements"
+                    title='Filter by Education Requirements'
                     subdued
                   >
                     <CheckboxGroup
-                      name="education"
+                      name='education'
                       value={this.state.education}
                       onChange={this.state.masterJobs && this.educationChanged}
-                      className="flex col lh-copy"
+                      className='flex col lh-copy'
                     >
                       <label>
-                        <Checkbx value="Associates" /> Associates
+                        <Checkbx value='Associates' /> Associates
                       </label>
                       <label>
-                        <Checkbx value="Bachelors" /> Bachelors
+                        <Checkbx value='Bachelors' /> Bachelors
                       </label>
                       <label>
-                        <Checkbx value="Bachelors in Human Services" />{' '}
+                        <Checkbx value='Bachelors in Human Services' />{' '}
                         Bachelors in Human Services
                       </label>
                       <label>
-                        <Checkbx value="HS/GED" /> HS/GED
+                        <Checkbx value='HS/GED' /> HS/GED
                       </label>
                       <label>
-                        <Checkbx value="Masters" /> Masters
-                      </label>
-
-                      <label>
-                        <Checkbx value="Ph.D." /> Ph.D.
-                      </label>
-                      <label>
-                        <Checkbx value="MD" /> MD
-                      </label>
-                      <label>
-                        <Checkbx value="DO" /> DO
+                        <Checkbx value='Masters' /> Masters
                       </label>
 
                       <label>
-                        <Checkbx value="NP" /> NP
+                        <Checkbx value='Ph.D.' /> Ph.D.
                       </label>
                       <label>
-                        <Checkbx value="PA" /> PA
+                        <Checkbx value='MD' /> MD
+                      </label>
+                      <label>
+                        <Checkbx value='DO' /> DO
+                      </label>
+
+                      <label>
+                        <Checkbx value='NP' /> NP
+                      </label>
+                      <label>
+                        <Checkbx value='PA' /> PA
                       </label>
                     </CheckboxGroup>
                     {/* <Checkbox
@@ -435,22 +459,22 @@ class App extends Component {
                     /> */}
                   </Card.Section>
 
-                  <Card.Section title="Filter by Timings" subdued>
+                  <Card.Section title='Filter by Timings' subdued>
                     <CheckboxGroup
-                      name="timings"
+                      name='timings'
                       value={this.state.timings}
                       onChange={this.state.masterJobs && this.timingsChanged}
-                      className="flex col lh-copy"
+                      className='flex col lh-copy'
                     >
                       <label>
-                        <Checkbx value="rotating" /> Rotating
+                        <Checkbx value='rotating' /> Rotating
                       </label>
 
                       <label>
-                        <Checkbx value="evenings" /> Evenings
+                        <Checkbx value='evenings' /> Evenings
                       </label>
                       <label>
-                        <Checkbx value="days" /> Days
+                        <Checkbx value='days' /> Days
                       </label>
                     </CheckboxGroup>
                     {/* <Checkbox
@@ -468,58 +492,58 @@ class App extends Component {
                   </Card.Section>
 
                   <Card.Section
-                    title="Filter by Licensure Requirements"
+                    title='Filter by Licensure Requirements'
                     subdued
                   >
                     <CheckboxGroup
-                      name="licensure"
+                      name='licensure'
                       value={this.state.licensure}
                       onChange={this.state.masterJobs && this.licensureChanged}
-                      className="flex col lh-copy"
+                      className='flex col lh-copy'
                     >
                       <label>
-                        <Checkbx value="QMHP-A" /> QMHP-A
+                        <Checkbx value='QMHP-A' /> QMHP-A
                       </label>
 
                       <label>
-                        <Checkbx value="QMHP-C" /> QMHP-C
+                        <Checkbx value='QMHP-C' /> QMHP-C
                       </label>
                       <label>
-                        <Checkbx value="QDDP" /> QDDP
-                      </label>
-
-                      <label>
-                        <Checkbx value="CSAC" /> CSAC
+                        <Checkbx value='QDDP' /> QDDP
                       </label>
 
                       <label>
-                        <Checkbx value="PA" /> PA
-                      </label>
-                      <label>
-                        <Checkbx value="NP" /> NP
+                        <Checkbx value='CSAC' /> CSAC
                       </label>
 
                       <label>
-                        <Checkbx value="CNA" /> CNA
+                        <Checkbx value='PA' /> PA
+                      </label>
+                      <label>
+                        <Checkbx value='NP' /> NP
                       </label>
 
                       <label>
-                        <Checkbx value="PCA" /> PCA
+                        <Checkbx value='CNA' /> CNA
+                      </label>
+
+                      <label>
+                        <Checkbx value='PCA' /> PCA
                       </label>
                       <label>
-                        <Checkbx value="Licensed Resident/Supervisee" />{' '}
+                        <Checkbx value='Licensed Resident/Supervisee' />{' '}
                         Licensed Resident/Supervisee
                       </label>
 
                       <label>
-                        <Checkbx value="LPN" /> LPN
+                        <Checkbx value='LPN' /> LPN
                       </label>
 
                       <label>
-                        <Checkbx value="RN" /> RN
+                        <Checkbx value='RN' /> RN
                       </label>
                       <label>
-                        <Checkbx value="None" /> None
+                        <Checkbx value='None' /> None
                       </label>
                     </CheckboxGroup>
                     {/* <Checkbox
@@ -574,31 +598,31 @@ class App extends Component {
                   </Card.Section>
 
                   <Card.Section
-                    title="Filter by Experience Requirements"
+                    title='Filter by Experience Requirements'
                     subdued
                   >
                     <CheckboxGroup
-                      name="experience"
+                      name='experience'
                       value={this.state.experience}
                       onChange={this.state.masterJobs && this.experienceChanged}
-                      className="flex col lh-copy"
+                      className='flex col lh-copy'
                     >
                       <label>
-                        <Checkbx value="More than 5 years" /> More than 5 years
+                        <Checkbx value='More than 5 years' /> More than 5 years
                       </label>
                       <label>
-                        <Checkbx value="5 years" /> 5 years{' '}
-                      </label>
-
-                      <label>
-                        <Checkbx value="3 years" /> 3 years
+                        <Checkbx value='5 years' /> 5 years{' '}
                       </label>
 
                       <label>
-                        <Checkbx value="1 year" /> 1 year
+                        <Checkbx value='3 years' /> 3 years
+                      </label>
+
+                      <label>
+                        <Checkbx value='1 year' /> 1 year
                       </label>
                       <label>
-                        <Checkbx value="None" /> None
+                        <Checkbx value='None' /> None
                       </label>
                     </CheckboxGroup>
 
@@ -625,12 +649,12 @@ class App extends Component {
                   </Card.Section>
                 </Card>
               </FormLayout>
-              )
+
             </Layout.Section>
             <Layout.Section>
               {this.state.jobs &&
                 this.state.jobs.map((job, index) => (
-                  <div className="pb4" key={index}>
+                  <div className='pb4' key={index}>
                     <Link to={`/job/${job.id}`}>
                       <Card
                         title={job.name}
@@ -650,8 +674,8 @@ class App extends Component {
           </Layout>
         </Page>
       </article>
-    );
+    )
   }
 }
 
-export default App;
+export default App

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { database, auth } from '../firebase';
+import React, { Component } from 'react'
+import { database, auth } from '../firebase'
 import {
   Page,
   Layout,
@@ -9,8 +9,8 @@ import {
   ButtonGroup,
   Button,
   Select
-} from '@shopify/polaris';
-import { Redirect } from 'react-router-dom';
+} from '@shopify/polaris'
+import { Redirect } from 'react-router-dom'
 
 export default class Create extends Component {
   state = {
@@ -23,11 +23,11 @@ export default class Create extends Component {
     salary: undefined,
     info: undefined,
     experience: undefined,
-    hours: 'TBD',
-    licensure: [],
+    hours: [],
+    licensure: ['None'],
     status: ['open'],
     to: null
-  };
+  }
 
   //
   // handleInputChange(event) {
@@ -41,73 +41,73 @@ export default class Create extends Component {
   // }
 
   handleCategoryUpdate = e => {
-    let category = this.state.category;
-    category = e;
-    this.setState({ category });
-  };
+    let category = this.state.category
+    category = e
+    this.setState({ category })
+  }
 
   handleLocationUpdate = e => {
-    let location = this.state.location;
-    location = e;
-    this.setState({ location });
-  };
+    let location = this.state.location
+    location = e
+    this.setState({ location })
+  }
 
   handleEducationUpdate = e => {
-    let education = this.state.education;
-    education = e;
-    this.setState({ education });
-  };
+    let education = this.state.education
+    education = e
+    this.setState({ education })
+  }
 
   handleSalaryUpdate = e => {
-    let salary = this.state.salary;
-    salary = e;
-    this.setState({ salary });
-  };
+    let salary = this.state.salary
+    salary = e
+    this.setState({ salary })
+  }
 
   handleExperienceUpdate = e => {
-    let experience = this.state.experience;
-    experience = e;
-    this.setState({ experience });
-  };
+    let experience = this.state.experience
+    experience = e
+    this.setState({ experience })
+  }
 
   handleNameUpdate = e => {
-    let name = this.state.name;
-    name = e;
-    this.setState({ name });
-  };
+    let name = this.state.name
+    name = e
+    this.setState({ name })
+  }
 
   handlePositionUpdate = e => {
-    let position = this.state.position;
-    position = e;
-    this.setState({ position });
-  };
+    let position = this.state.position
+    position = e
+    this.setState({ position })
+  }
 
   handleLicensureUpdate = e => {
-    let licensure = this.state.licensure;
-    licensure = e;
-    this.setState({ licensure });
-  };
+    let licensure = this.state.licensure
+    licensure = e
+    this.setState({ licensure })
+  }
 
   handleStatementUpdate = e => {
-    let statement = this.state.statement;
-    statement = e;
-    this.setState({ statement });
-  };
+    let statement = this.state.statement
+    statement = e
+    this.setState({ statement })
+  }
 
   handleInfoUpdate = e => {
-    let info = this.state.info;
-    info = e;
-    this.setState({ info });
-  };
+    let info = this.state.info
+    info = e
+    this.setState({ info })
+  }
 
   handleHoursUpdate = e => {
-    let hours = this.state.hours;
-    hours = e;
-    this.setState({ hours });
-  };
+    let hours = []
+    hours = e
+    this.setState({ hours })
+  }
 
   handleSubmit = () => {
-    const newJobPostKey = database.ref(`/jobs`).push().key;
+    const newJobPostKey = database.ref(`/jobs`).push().key
 
     var jobData = {
       id: newJobPostKey,
@@ -121,30 +121,30 @@ export default class Create extends Component {
       licensure: this.state.licensure || null,
       info: this.state.info || null,
       experience: this.state.experience || null,
-      hours: this.state.hours || null,
-      status: this.state.status || null,
+      hours: (this.state.hours.length === 0 && ['TBD']) || this.state.hours,
+      status: this.state.status,
       to: this.state.to
-    };
+    }
 
-    var updates = {};
-    updates[`/jobs/${newJobPostKey}`] = jobData;
+    var updates = {}
+    updates[`/jobs/${newJobPostKey}`] = jobData
 
     return database
       .ref()
       .update(updates)
       .then(this.setState({ to: '/dashboard' }))
-      .catch(error => console.log(error.message));
-  };
+      .catch(error => console.log(error.message))
+  }
 
-  render() {
+  render () {
     if (this.state.to) {
-      return <Redirect to={this.state.to} />;
+      return <Redirect to={this.state.to} />
     }
 
     return (
       <Page
         fullWidth
-        title="Create New Job"
+        title='Create New Job'
         separator
         primaryAction={{ content: 'Logout', onAction: () => auth.signOut() }}
         secondaryActions={[
@@ -156,11 +156,11 @@ export default class Create extends Component {
       >
         <Layout>
           <Layout.Section secondary>
-            <div className="measure-wide pa4 pl0-l pl0-m">
+            <div className='measure-wide pa4 pl0-l pl0-m'>
               <FormLayout>
                 <Select
-                  id="createFormCategory"
-                  label="Category"
+                  id='createFormCategory'
+                  label='Category'
                   options={[
                     'Clinical',
                     'Case Management',
@@ -173,28 +173,28 @@ export default class Create extends Component {
                     'Psychiatrist',
                     'Other Categories'
                   ]}
-                  placeholder="Pick a Category"
+                  placeholder='Pick a Category'
                   value={this.state.category}
                   onChange={this.handleCategoryUpdate}
                   // error={'hello'}
                 />
                 <TextField
-                  id="createFormTitle"
-                  label="Job Title"
+                  id='createFormTitle'
+                  label='Job Title'
                   value={this.state.name}
                   onChange={this.handleNameUpdate}
-                  type="text"
+                  type='text'
                 />
                 <TextField
-                  id="createFormPosition"
-                  label="Position"
+                  id='createFormPosition'
+                  label='Position'
                   value={this.state.position}
                   onChange={this.handlePositionUpdate}
-                  type="text"
+                  type='text'
                 />
                 <Select
-                  id="createFormLocation"
-                  label="Location"
+                  id='createFormLocation'
+                  label='Location'
                   options={[
                     'Suffolk',
                     'Isle of Wight',
@@ -202,22 +202,22 @@ export default class Create extends Component {
                     'Franklin',
                     'other locations'
                   ]}
-                  placeholder="Pick a Location"
+                  placeholder='Pick a Location'
                   value={this.state.location}
                   onChange={this.handleLocationUpdate}
                   required
                 />
                 <TextField
-                  id="createFormResponsibilities"
-                  label="General Statement of Responsibilities"
+                  id='createFormResponsibilities'
+                  label='General Statement of Responsibilities'
                   value={this.state.statement}
                   onChange={this.handleStatementUpdate}
                   multiline={5}
-                  type="text"
+                  type='text'
                 />
                 <Select
-                  id="createFormEducation"
-                  label="Education"
+                  id='createFormEducation'
+                  label='Education'
                   options={[
                     'Associates',
                     'Bachelors',
@@ -230,13 +230,13 @@ export default class Create extends Component {
                     'NP',
                     'PA'
                   ]}
-                  placeholder="Pick a Qualification"
+                  placeholder='Pick a Qualification'
                   value={this.state.education}
                   onChange={this.handleEducationUpdate}
                 />
                 <ChoiceList
                   allowMultiple
-                  title="Hours"
+                  title='Hours'
                   choices={[
                     {
                       label: 'Days',
@@ -255,8 +255,8 @@ export default class Create extends Component {
                   onChange={this.handleHoursUpdate}
                 />
                 <Select
-                  id="createFormSalary"
-                  label="Salary"
+                  id='createFormSalary'
+                  label='Salary'
                   options={[
                     'To be decided',
                     'Less than $25K',
@@ -265,13 +265,13 @@ export default class Create extends Component {
                     '$60K – $100K',
                     'More than $100K'
                   ]}
-                  placeholder="Pick a Salary"
+                  placeholder='Pick a Salary'
                   value={this.state.salary}
                   onChange={this.handleSalaryUpdate}
                 />
                 <ChoiceList
-                  id="createFormLicensure"
-                  title="Licensure Status"
+                  id='createFormLicensure'
+                  title='Licensure Status'
                   choices={[
                     {
                       label: 'QMHP-A',
@@ -326,8 +326,8 @@ export default class Create extends Component {
                   onChange={this.handleLicensureUpdate}
                 />
                 <Select
-                  id="createFormExperience"
-                  label="Experience"
+                  id='createFormExperience'
+                  label='Experience'
                   options={[
                     'None',
                     '1 year',
@@ -335,17 +335,17 @@ export default class Create extends Component {
                     '5 years',
                     'More than 5 years'
                   ]}
-                  placeholder="Pick a level of experience"
+                  placeholder='Pick a level of experience'
                   value={this.state.experience}
                   onChange={this.handleExperienceUpdate}
                 />
                 <TextField
-                  id="createFormInfo"
-                  label="Additional Information "
+                  id='createFormInfo'
+                  label='Additional Information '
                   value={this.state.info}
                   onChange={this.handleInfoUpdate}
                   multiline={3}
-                  type="text"
+                  type='text'
                 />
 
                 <ButtonGroup>
@@ -355,19 +355,17 @@ export default class Create extends Component {
                   <Button
                     primary
                     onClick={this.handleSubmit}
-                    id="createFormSubmit"
+                    id='createFormSubmit'
                     disabled={
                       !this.state.name ||
-                      !this.state.category ||
-                      !this.state.position ||
-                      !this.state.location ||
-                      !this.state.statement ||
-                      !this.state.education ||
-                      !this.state.salary ||
-                      !this.state.info ||
-                      !this.state.experience ||
-                      !this.state.hours.length === 0 ||
-                      !this.state.licensure.length === 0
+                        !this.state.category ||
+                        !this.state.position ||
+                        !this.state.location ||
+                        !this.state.statement ||
+                        !this.state.education ||
+                        !this.state.salary ||
+                        !this.state.info ||
+                        !this.state.experience
                     }
                   >
                     Create Job
@@ -378,6 +376,6 @@ export default class Create extends Component {
           </Layout.Section>
         </Layout>
       </Page>
-    );
+    )
   }
 }
