@@ -4,23 +4,18 @@ import { Redirect, Link } from 'react-router-dom'
 import { Page, Layout, Card, FormLayout, Checkbox } from '@shopify/polaris'
 import { Checkbox as Checkbx, CheckboxGroup } from 'react-checkbox-group'
 
-class App extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      jobs: null,
-      masterJobs: null,
-      to: null,
-      selected: [],
-      categories: [],
-      locations: [],
-      education: [],
-      timings: [],
-      licensure: [],
-      experience: []
-    }
-    // this.handleFilter = this.handleFilter.bind(this);
-    // this.handleSelection = this.handleSelection.bind(this);
+export default class App extends Component {
+  state = {
+    jobs: null,
+    masterJobs: null,
+    to: null,
+    selected: [],
+    categories: [],
+    locations: [],
+    education: [],
+    timings: [],
+    licensure: [],
+    experience: []
   }
 
   componentDidMount () {
@@ -32,37 +27,6 @@ class App extends Component {
         })
     })
   }
-  // handleSelection(selection) {
-  //   const selected = new Set([...this.state.selected]);
-  //   if (selected.has(selection)) {
-  //     selected.delete(selection);
-  //     this.setState({ jobs: [...this.state.masterJobs] }, () =>
-  //       selected.forEach(filter => this.handleFilter(filter))
-  //     );
-  //   } else {
-  //     selected.add(selection);
-  //     this.setState({ jobs: [...this.state.masterJobs] }, () =>
-  //       selected.forEach(filter => this.handleFilter(filter))
-  //     );
-  //   }
-  //   this.setState({ selected });
-  // }
-
-  // handleFilter(selection) {
-  //   const joby = [...this.state.jobs];
-
-  //   const jobs = joby.filter(
-  //     job =>
-  //       job.category === selection ||
-  //       job.location === selection ||
-  //       job.education === selection ||
-  //       job.experience === selection ||
-  //       job.hours.includes(selection) ||
-  //       job.licensure.includes(selection)
-  //   );
-
-  //   this.setState({ jobs });
-  // }
 
   siftCategories (selection) {
     const joby = [...this.state.jobs]
@@ -150,25 +114,6 @@ class App extends Component {
       await this.state.timings.forEach(filter => this.siftTimings(filter))
       await this.state.licensure.forEach(filter => this.siftLicensure(filter))
       await this.state.experience.forEach(filter => this.siftExperience(filter))
-
-      // if (this.state.categories) {
-      //   this.state.categories.forEach(filter => this.siftCategories(filter))
-      // }
-      // if (this.state.locations) {
-      //   this.state.locations.forEach(filter => this.siftLocations(filter))
-      // }
-      // if (this.state.education) {
-      //   this.state.education.forEach(filter => this.siftEducation(filter))
-      // }
-      // if (this.state.timings) {
-      //   this.state.timings.forEach(filter => this.siftTimings(filter))
-      // }
-      // if (this.state.licensure) {
-      //   this.state.licensure.forEach(filter => this.siftLicensure(filter))
-      // }
-      // if (this.state.experience) {
-      //   this.state.experience.forEach(filter => this.siftExperience(filter))
-      // }
     })
   }
 
@@ -283,46 +228,7 @@ class App extends Component {
                         <Checkbx value='Other Categories' /> Other
                       </label>
                     </CheckboxGroup>
-                    {/* <Checkbox
-                        label="Clinical"
-                        onChange={() => this.handleSelection('Clinical')}
-                        />
-                        <Checkbox
-                        label="Case Management"
-                        onChange={() => this.handleSelection('Case Management')}
-                        />
-                        <Checkbox
-                        label="Child & Family"
-                        onChange={() => this.handleSelection('Child & Family')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Emergency"
-                        onChange={() => this.handleSelection('Emergency')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Rehabilitation"
-                        onChange={() => this.handleSelection('Rehabilitation')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Residential"
-                        onChange={() => this.handleSelection('Residential')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Administrative"
-                        onChange={() => this.handleSelection('Administrative')}
-                        />
-                        <Checkbox
-                        label="Medical"
-                        onChange={() => this.handleSelection('Medical')}
-                        />
-                        <Checkbox
-                        label="Psychiatrist"
-                        onChange={() => this.handleSelection('Psychiatrist')}
-                        />
-                        <Checkbox
-                        label="Other"
-                        onChange={() => this.handleSelection('Other Categories')}
-                    /> */}
+
                   </Card.Section>
 
                   <Card.Section title='Filter by Locations' subdued>
@@ -349,27 +255,6 @@ class App extends Component {
                       </label>
                     </CheckboxGroup>
 
-                    {/*
-                        <Checkbox
-                        label="Suffolk"
-                        onChange={() => this.handleSelection('Suffolk')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Isle of Wight"
-                        onChange={() => this.handleSelection('Isle of Wight')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Southampton"
-                        onChange={() => this.handleSelection('Southampton')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Franklin"
-                        onChange={() => this.handleSelection('Franklin')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Other"
-                        onChange={() => this.handleSelection('other locations')}
-                    /> */}
                   </Card.Section>
 
                   <Card.Section
@@ -416,47 +301,7 @@ class App extends Component {
                         <Checkbx value='PA' /> PA
                       </label>
                     </CheckboxGroup>
-                    {/* <Checkbox
-                        label="Associates"
-                        onChange={() => this.handleSelection('Associates')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Bachelors"
-                        onChange={() => this.handleSelection('Bachelors')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Bachelors in Human Services"
-                        onChange={() =>
-                        this.handleSelection('Bachelors in Human Services')}
-                    /> */}
-                    {/* <Checkbox
-                        label="HS/GED"
-                        onChange={() => this.handleSelection('HS/GED')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Masters"
-                        onChange={() => this.handleSelection('Masters')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Ph.D."
-                        onChange={() => this.handleSelection('Ph.D.')}
-                    /> */}
-                    {/* <Checkbox
-                        label="MD"
-                        onChange={() => this.handleSelection('MD')}
-                    /> */}
-                    {/* <Checkbox
-                        label="DO"
-                        onChange={() => this.handleSelection('DO')}
-                    /> */}
-                    {/* <Checkbox
-                        label="NP"
-                        onChange={() => this.handleSelection('NP')}
-                    /> */}
-                    {/* <Checkbox
-                        label="PA"
-                        onChange={() => this.handleSelection('PA')}
-                    /> */}
+
                   </Card.Section>
 
                   <Card.Section title='Filter by Timings' subdued>
@@ -477,18 +322,7 @@ class App extends Component {
                         <Checkbx value='days' /> Days
                       </label>
                     </CheckboxGroup>
-                    {/* <Checkbox
-                        label="Days"
-                        onChange={() => this.handleSelection('days')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Evenings"
-                        onChange={() => this.handleSelection('evenings')}
-                    /> */}
-                    {/* <Checkbox
-                        label="Rotating"
-                        onChange={() => this.handleSelection('rotating')}
-                    /> */}
+
                   </Card.Section>
 
                   <Card.Section
@@ -546,55 +380,7 @@ class App extends Component {
                         <Checkbx value='None' /> None
                       </label>
                     </CheckboxGroup>
-                    {/* <Checkbox
-                      label="QMHP-A"
-                      onChange={() => this.handleSelection('QMHP-A')}
-                    /> */}
-                    {/* <Checkbox
-                      label="QMHP-C"
-                      onChange={() => this.handleSelection('QMHP-C')}
-                    /> */}
-                    {/* <Checkbox
-                      label="QDDP"
-                      onChange={() => this.handleSelection('QDDP')}
-                    /> */}
-                    {/* <Checkbox
-                      label="CSAC"
-                      onChange={() => this.handleSelection('CSAC')}
-                    /> */}
-                    {/* <Checkbox
-                      label="PA"
-                      onChange={() => this.handleSelection('PA')}
-                      />
-                      <Checkbox
-                      label="NP"
-                      onChange={() => this.handleSelection('NP')}
-                    /> */}
-                    {/* <Checkbox
-                      label="CNA"
-                      onChange={() => this.handleSelection('CNA')}
-                    /> */}
-                    {/* <Checkbox
-                      label="PCA"
-                      onChange={() => this.handleSelection('PCA')}
-                    /> */}
-                    {/* <Checkbox
-                      label="Licensed Resident/Supervisee"
-                      onChange={() =>
-                        this.handleSelection('Licensed Resident/Supervisee')}
-                    /> */}
-                    {/* <Checkbox
-                      label="LPN"
-                      onChange={() => this.handleSelection('LPN')}
-                    /> */}
-                    {/* <Checkbox
-                      label="RN"
-                      onChange={() => this.handleSelection('RN')}
-                    /> */}
-                    {/* <Checkbox
-                      label="None"
-                      onChange={() => this.handleSelection('None')}
-                    /> */}
+
                   </Card.Section>
 
                   <Card.Section
@@ -625,27 +411,6 @@ class App extends Component {
                         <Checkbx value='None' /> None
                       </label>
                     </CheckboxGroup>
-
-                    {/* <Checkbox
-                      label="None"
-                      onChange={() => this.handleSelection('None')}
-                    /> */}
-                    {/* <Checkbox
-                      label="1 year"
-                      onChange={() => this.handleSelection('1 year')}
-                    /> */}
-                    {/* <Checkbox
-                      label="3 years"
-                      onChange={() => this.handleSelection('3 years')}
-                    /> */}
-                    {/* <Checkbox
-                      label="5 years"
-                      onChange={() => this.handleSelection('5 years')}
-                    /> */}
-                    {/* <Checkbox
-                      label="More than 5 years"
-                      onChange={() => this.handleSelection('More than 5 years')}
-                    /> */}
                   </Card.Section>
                 </Card>
               </FormLayout>
@@ -677,5 +442,3 @@ class App extends Component {
     )
   }
 }
-
-export default App
