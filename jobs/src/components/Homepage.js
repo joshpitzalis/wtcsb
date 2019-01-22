@@ -179,7 +179,8 @@ export default class App extends Component {
       <article>
         <div className='h-100 bg-blue w-100 '>
           <h1 className='f-headline white b pl5 pt6 lh-copy'>
-            WTCSB Job Opportinites
+            WTCSB Job 
+            Opportunities
           </h1>
         </div>
 
